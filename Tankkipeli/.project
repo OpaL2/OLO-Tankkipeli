@@ -15,4 +15,11 @@
 		<nature>org.scala-ide.sdt.core.scalanature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>JBox2D</name>
+			<type>2</type>
+			<location>/Users/oskari/Downloads/jbox2d-master/jbox2d-library/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
