@@ -6,11 +6,11 @@ import LinkedList.List
 
 
 
-class World (width: Int, heigth: Int) {
+class World (width: Int, height: Int) {
 
  
   //creating gamefield and tank list
-  val gamefield = new gameEngine.Gamefield(width, heigth)
+  val gamefield = new gameEngine.Gamefield(width, height)
   val tankList = List.empty[Tank]
   
   /**creates floor from given vector of Y-axis coordinates*/
@@ -30,7 +30,7 @@ class World (width: Int, heigth: Int) {
   def setCeiling(coordinates: Vector[Int]) = {
     var x = 0
     coordinates.foreach { y => {
-      for(dy <- y until this.gamefield.heigth) {
+      for(dy <- y until this.gamefield.height) {
         val pos = new Pos(x, dy)
         this.gamefield.update(new Wall(pos), pos)
       }
@@ -42,12 +42,12 @@ class World (width: Int, heigth: Int) {
   /**creates tank with given id and start position, inserts it to world*/
   def createTank(id: String, xPos: Int):Boolean = {
     var y = 0
-    while(y < this.gamefield.heigth && !this.gamefield.isEmpty(new Pos(xPos, y))) {
+    while(y < this.gamefield.height && !this.gamefield.isEmpty(new Pos(xPos, y))) {
       y = y + 1
     }
-    if( y < this.gamefield.heigth) {
+    if( y < this.gamefield.height) {
       val pos = new Pos(xPos, y)
-      val tank = new Tank(id, pos)
+      val tank = new Tank(id, pos, this)
       this.tankList.append(tank)
       this.gamefield.update(tank, pos)
       true

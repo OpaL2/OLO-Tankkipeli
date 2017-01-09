@@ -2,9 +2,9 @@ package gameEngine
 
 import scala.collection.mutable.Buffer
 
-class Gamefield(val width: Int, val heigth: Int) {
+class Gamefield(val width: Int, val height: Int) {
   
-  private val contents = Buffer.tabulate[GameObject](heigth, width)((y,x) => new Empty(new Pos(x,y)))
+  private val contents = Buffer.tabulate[GameObject](height, width)((y,x) => new Empty(new Pos(x,y)))
   
   def update(element: GameObject, location: Pos) = {
     this.contents(location.y)(location.x) = element
@@ -15,9 +15,21 @@ class Gamefield(val width: Int, val heigth: Int) {
   
   def apply(location: Pos) = this.contents(location.y)(location.x)
   
-  def isEmpty(location: Pos): Boolean = this.apply(location).typeString == "Empty"
+  def isEmpty(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Empty"
   
-  def isWall(location: Pos): Boolean = this.apply(location).typeString == "Wall"
+  def isWall(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Wall"
+  
+  def isTank(location: Pos): Boolean = this.contains(location)  && this.apply(location).typeString == "Tank"
+  
+  private def nearTank(location: Pos): Boolean = this.isTank(location) || this.isTank(location.up) || this.isTank(location.down)
+  
+  def canMove(location: Pos): Boolean = this.contains(location)&&this.isEmpty(location)&&(!this.nearTank(location))
+  
+  private def contains(x: Int, y: Int): Boolean = 
+    x >= 0 && x < this.width && 
+    y >= 0 && y < this.height 
+    
+  def contains(location: Pos): Boolean = this.contains(location.x, location.y)
   
   override def toString() = {
     var str = ""
@@ -65,4 +77,13 @@ class Wall(private var pos: Pos) extends GameObject {
   
 }
 
-class Pos(val x: Int, val y: Int)
+class Pos(val x: Int, val y: Int) {
+  
+  def left: Pos = new Pos(this.x - 1, this.y)
+  
+  def right: Pos = new Pos(this.x + 1, this.y)
+  
+  def up: Pos = new Pos(this.x, this.y + 1)
+  
+  def down: Pos = new Pos(this.x, this.y - 1)
+}
