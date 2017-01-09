@@ -3,14 +3,11 @@ package gameEngine
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics
 
-
 class World (val width: Int, val heigth: Int, gravity: Double) {
   
   //creating new Box2D world to run this game simulation
   val b2gravity = Conversion.convertGravity(gravity)
   val b2world = new dynamics.World(b2gravity)
-  
-  
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = ???
