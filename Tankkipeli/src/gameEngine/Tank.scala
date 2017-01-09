@@ -14,6 +14,8 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
   private var shootPower = 128 //8-bit value
   
+  //moving related methods
+  
   /**trying to move tank left*/
   def moveLeft(): Boolean = {
     if (this.world.gamefield.canMove(this.position.left.down)){
@@ -50,6 +52,8 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     true
   }
   
+  //cannon related methods:
+  
   def turnCannonLeft(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection - amount)
   
   def turnCannonRight(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection + amount)
@@ -62,7 +66,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def getShootPower = this.shootPower
   
+  def shoot(): Unit = ???
   
+  
+  //GameObject methods:
   
   def getPosition():Pos = this.position
   
@@ -71,8 +78,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   def typeString = "Tank"
   
   
-  
-  def shoot(): Unit = ???
+  //Other methods: 
   
   override def toString = this.id
   
