@@ -1,12 +1,12 @@
 package gameEngine
 
 
-class Tank(val id: String) {
+class Tank(val id: String) extends GameObject {
   
-  /**applying force to left, trying to move tank*/
+  /**trying to move tank left*/
   def moveLeft(): Unit = ???
   
-  /**applying force to right, trying to move tank*/
+  /**trying to move tank right*/
   def moveRight(): Unit = ???
   
   def turnCannonLeft(): Unit = ???
@@ -17,7 +17,11 @@ class Tank(val id: String) {
   
   def decreaseShootPower(): Unit = ???
   
-  def getPosition():(Int, Int) = ???
+  def getPosition():Pos = ???
+  
+  def setPosition(location: Pos) = ???
+  
+  def typeString = "Tank"
   
   def shoot(): Unit = ???
   
