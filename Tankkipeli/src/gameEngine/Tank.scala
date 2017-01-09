@@ -1,7 +1,7 @@
 package gameEngine
 
 
-class Tank(val id: String) extends GameObject {
+class Tank(val id: String,private var position: Pos) extends GameObject {
   
   /**trying to move tank left*/
   def moveLeft(): Unit = ???
@@ -19,11 +19,13 @@ class Tank(val id: String) extends GameObject {
   
   def getPosition():Pos = ???
   
-  def setPosition(location: Pos) = ???
+  def setPosition(location: Pos) = this.position = location
   
   def typeString = "Tank"
   
   def shoot(): Unit = ???
+  
+  override def toString = this.id
   
   
 }

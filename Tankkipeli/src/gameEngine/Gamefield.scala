@@ -15,6 +15,10 @@ class Gamefield(val width: Int, val heigth: Int) {
   
   def apply(location: Pos) = this.contents(location.y)(location.x)
   
+  def isEmpty(location: Pos): Boolean = this.apply(location).typeString == "Empty"
+  
+  def isWall(location: Pos): Boolean = this.apply(location).typeString == "Wall"
+  
   override def toString() = {
     var str = ""
     this.contents.foreach(y => {
