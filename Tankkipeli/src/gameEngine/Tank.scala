@@ -1,7 +1,18 @@
 package gameEngine
 
+object Tank{
+  def clamp8bit(value: Int) = {
+    if(value < 0) 0
+    else if (value > 255) 255
+    else value
+  }
+}
+
 
 class Tank(val id: String,private var position: Pos, private val world: World) extends GameObject {
+  
+  private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
+  private var shootPower = 128 //8-bit value
   
   /**trying to move tank left*/
   def moveLeft(): Boolean = {
@@ -39,19 +50,27 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     true
   }
   
-  def turnCannonLeft(): Unit = ???
+  def turnCannonLeft(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection - amount)
   
-  def turnCannonRight(): Unit = ???
+  def turnCannonRight(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection + amount)
   
-  def increaseShootPower(): Unit = ???
+  def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
   
-  def decreaseShootPower(): Unit = ???
+  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
+  
+  def getCannonAngle = this.shootDirection
+  
+  def getShootPower = this.shootPower
+  
+  
   
   def getPosition():Pos = this.position
   
   def setPosition(location: Pos) = this.position = location
   
   def typeString = "Tank"
+  
+  
   
   def shoot(): Unit = ???
   
