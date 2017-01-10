@@ -39,6 +39,7 @@ class Gamefield(val width: Int, val height: Int) {
         case "Empty" => str = str + " "
         case "Wall" => str = str + "#"
         case "Tank" => str = str + "T"
+        case "Bullet" => str = str + "B"
       }
     })
     str = str + ";\n"
