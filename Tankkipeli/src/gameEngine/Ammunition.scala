@@ -66,6 +66,8 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   def getPosition: Pos = new Pos(this.position.x.toInt, this.position.y.toInt)
   
+  def getPositionVector = this.position
+  
   def typeString = "Bullet"
   
 }

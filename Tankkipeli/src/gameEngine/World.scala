@@ -11,8 +11,8 @@ class World (width: Int, height: Int) {
  
   //creating gamefield and tank list
   val gamefield = new gameEngine.Gamefield(width, height)
-  private val tankList = List.empty[Tank]
-  private var bulletBuffer = Buffer.empty[Bullet]
+  val tankList = List.empty[Tank]
+  var bulletBuffer = Buffer.empty[Bullet]
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
