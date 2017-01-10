@@ -2,7 +2,7 @@ package gameEngine
 
 
 import LinkedList.List
-
+import scala.collection.mutable.Buffer
 
 
 
@@ -11,7 +11,8 @@ class World (width: Int, height: Int) {
  
   //creating gamefield and tank list
   val gamefield = new gameEngine.Gamefield(width, height)
-  val tankList = List.empty[Tank]
+  private val tankList = List.empty[Tank]
+  private var bulletBuffer = Buffer.empty[Bullet]
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
@@ -62,6 +63,16 @@ class World (width: Int, height: Int) {
   def nextTank: Unit = this.tankList.nextItem()
   
   override def toString() = this.gamefield.toString()
+  
+  def addBullet(bullet: Bullet) = this.bulletBuffer.append(bullet)
+  
+  def removeBullet(bullet: Bullet) = this.bulletBuffer = this.bulletBuffer.filterNot { _ == bullet }
+  
+  /**call this mehtod to make ammunitions fly, use small dt value, */
+  def update(dt: Double) = {
+    this.bulletBuffer.foreach { x => x.update(dt) }
+    this.tankList.foreach(_.update)
+  }
   
 }
 

@@ -1,6 +1,7 @@
 package LinkedList
 
 import scala.reflect.ClassTag
+import scala.collection.mutable.Buffer
 
 object List {
   
@@ -39,6 +40,25 @@ final class List[ElementType](items: Vector[ElementType]) {
   }
   
   def current(): Option[ElementType] = this.currentItem.value
+  
+  def toVector(): Vector[ElementType] = {
+    this.firstItem match {
+      case _ : NoItem[ElementType] => Vector.empty[ElementType]
+      case _ : Item[ElementType] => {
+        val buf = Buffer.empty[ElementType]
+        var curr: ListItem[ElementType] = this.firstItem
+        while(curr != NoItem[ElementType]) {
+          buf.append(curr.value.get)
+          curr = curr.next
+        }
+        buf.toVector
+      }
+    }
+  }
+  
+  def foreach(f: ElementType => Unit): Unit = {
+    this.toVector().foreach(f)
+  }
 }
 
 private sealed trait ListItem[ItemType] {

@@ -123,5 +123,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   override def toString = this.id
   
+  def update() = ???
+  
   
 }
