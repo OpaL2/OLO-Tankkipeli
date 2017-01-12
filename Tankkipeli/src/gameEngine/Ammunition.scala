@@ -8,10 +8,20 @@ object Ammunition{
   val MULTIPLIER = World.MULTIPLIER
 }
 
+class BasicAmmunition(world: World) extends Ammunition(world) {
+  val massMultiplier = 1.0
+  val dmg = 50
+}
+
+class HeavyAmmunition(world: World) extends Ammunition(world) {
+  val massMultiplier = 1.2
+  val dmg = 70
+}
+
 abstract class Ammunition(val world: World)  {
   
   val massMultiplier: Double
-  val dmg: Double 
+  val dmg: Int
 
   def shoot(startPos: Pos, angle: Int, power: Int) = {
     val bullet = new Bullet(startPos, angle, power, this.massMultiplier, this.world, this)
@@ -29,9 +39,9 @@ abstract class Ammunition(val world: World)  {
     //loop causing damage to positions, quite complex, hopefully works
     while (tmpDmg.toInt > 2 && iterRound < World.MAXDMGITER) {
       //damaging each position on a position filter
-      positionVector.foreach { this.dmgPosition(_, tmpDmg.toInt) }
+      positionVector.foreach { this.dmgPosition(_, tmpDmg) }
       positionVector.foreach { damagedPositions.append(_) }
-      tmpDmg /= World.DMGDIVIDER
+      tmpDmg = (tmpDmg/World.DMGDIVIDER).toInt
       iterRound += 1
       val tmp = Buffer.empty[Pos]
       positionVector.foreach{ x => {
@@ -59,7 +69,7 @@ abstract class Ammunition(val world: World)  {
   }
   
 //  /** currently does nothing, notifyes the ammunition that it is flied off the game*/
-  def outOfGame()
+  def outOfGame() = Unit
 }
 
 
