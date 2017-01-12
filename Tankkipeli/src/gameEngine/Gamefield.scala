@@ -33,7 +33,7 @@ class Gamefield(val width: Int, val height: Int) {
   
   override def toString() = {
     var str = ""
-    this.contents.foreach(y => {
+    this.contents.reverse.foreach(y => {
       y.foreach(x => {
       x.typeString match {
         case "Empty" => str = str + " "
