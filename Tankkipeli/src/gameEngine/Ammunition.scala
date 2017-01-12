@@ -18,6 +18,7 @@ abstract class Ammunition(val world: World)  {
     this.world.addBullet(bullet)
   }
   
+  /** makes ammunition to explode at given position, greater damage causes bigger expolsion*/
   def explode(position: Pos) = {
     val gamefield = this.world.gamefield
     
@@ -57,6 +58,7 @@ abstract class Ammunition(val world: World)  {
   }
   }
   
+//  /** currently does nothing, notifyes the ammunition that it is flied off the game*/
   def outOfGame()
 }
 

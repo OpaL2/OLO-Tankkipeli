@@ -123,7 +123,18 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   override def toString = this.id
   
-  def update() = ???
+  /**updates tank, aka checks that tank has ground below it*/
+  def update() = {
+   //drops tank one position down if it does not have ground below it
+   if(this.world.gamefield.isEmpty(this.position.down)) {
+      this.updateWorld(this.position.down)
+   }
+    //triggered if tank is dropped out of the gamefield
+    if(!this.world.gamefield.contains(this.position.down)) {
+      this.world.gamefield.update(new Empty(this.position), this.position)
+      this.causeDmg(10000)
+    }
+  }
   
   
 }
