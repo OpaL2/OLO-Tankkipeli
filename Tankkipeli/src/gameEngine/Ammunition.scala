@@ -31,6 +31,7 @@ abstract class Ammunition(val world: World)  {
   /** makes ammunition to explode at given position, greater damage causes bigger expolsion*/
   def explode(position: Pos) = {
     val gamefield = this.world.gamefield
+    this.world.addExpolsionPosition(position)
     
     var tmpDmg = this.dmg
     var iterRound = 0

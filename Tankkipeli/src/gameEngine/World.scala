@@ -3,6 +3,7 @@ package gameEngine
 
 import LinkedList.List
 import scala.collection.mutable.Buffer
+import scala.collection.mutable.Stack
 
 /** object storing constants for game engine*/
 object World {
@@ -20,6 +21,7 @@ class World (width: Int, height: Int) {
   //creating gamefield and tank list
   val gamefield = new gameEngine.Gamefield(width, height)
   val tankList = List.empty[Tank]
+  val explosionStack = Stack.empty[Pos]
   var bulletBuffer = Buffer.empty[Bullet]
   
   /**creates floor from given vector of Y-axis coordinates*/
@@ -75,6 +77,12 @@ class World (width: Int, height: Int) {
   def addBullet(bullet: Bullet) = this.bulletBuffer.append(bullet)
   
   def removeBullet(bullet: Bullet) = this.bulletBuffer = this.bulletBuffer.filterNot { _ == bullet }
+  
+  def addExpolsionPosition(position: Pos) = this.explosionStack.push(position)
+  
+  def isExpolded(): Boolean = !this.explosionStack.isEmpty
+  
+  def getExplosionPosition: Pos = this.explosionStack.pop()
   
   /**call this mehtod to make ammunitions fly, use small dt value, */
   def update(dt: Double) = {
