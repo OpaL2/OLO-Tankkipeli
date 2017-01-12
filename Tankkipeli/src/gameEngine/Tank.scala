@@ -10,8 +10,8 @@ object Tank{
   }
 }
 
-
-class Tank(val id: String,private var position: Pos, private val world: World) extends GameObject {
+/** class represents tank in a game, ALERT: Before executing any actions, check that tank is working, with isDestoryed method, none of the command methods will check this*/
+class Tank(val id: String,private var position: Pos, private val world: World) extends DestroyableObject(World.TANKHP) with GameObject {
   
   private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
   private var shootPower = 128 //8-bit value

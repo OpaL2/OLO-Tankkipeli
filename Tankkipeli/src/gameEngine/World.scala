@@ -4,7 +4,15 @@ package gameEngine
 import LinkedList.List
 import scala.collection.mutable.Buffer
 
-
+/** object storing constants for game engine*/
+object World {
+  val WALLHP = 20
+  val GRAVITY = 1.0
+  val MULTIPLIER = 1.0
+  val TANKHP = 40
+  val DMGDIVIDER = 3
+  val MAXDMGITER = 3
+}
 
 class World (width: Int, height: Int) {
 

@@ -1,10 +1,11 @@
 package gameEngine
 
 import scala.math
+import scala.collection.mutable.Buffer
 
 object Ammunition{
-  val GRAVITY = 1.0
-  val MULTIPLIER = 1.0
+  val GRAVITY = World.GRAVITY
+  val MULTIPLIER = World.MULTIPLIER
 }
 
 abstract class Ammunition(val world: World)  {
@@ -18,7 +19,42 @@ abstract class Ammunition(val world: World)  {
   }
   
   def explode(position: Pos) = {
+    val gamefield = this.world.gamefield
     
+    var tmpDmg = this.dmg
+    var iterRound = 0
+    var positionVector = Vector(position)
+    val damagedPositions = Buffer.empty[Pos]
+    //loop causing damage to positions, quite complex, hopefully works
+    while (tmpDmg.toInt > 2 && iterRound < World.MAXDMGITER) {
+      //damaging each position on a position filter
+      positionVector.foreach { this.dmgPosition(_, tmpDmg.toInt) }
+      positionVector.foreach { damagedPositions.append(_) }
+      tmpDmg /= World.DMGDIVIDER
+      iterRound += 1
+      val tmp = Buffer.empty[Pos]
+      positionVector.foreach{ x => {
+        def filtering(position: Pos) = {
+          if(tmp.filter(_ == position).isEmpty && damagedPositions.filter(_ == position).isEmpty) tmp.append(position)
+        }
+        filtering(x.up)
+        filtering(x.down)
+        filtering(x.left)
+        filtering(x.right)
+      }
+      }
+      positionVector = tmp.toVector
+    }
+  }
+  
+  private def dmgPosition(position: Pos, dmg: Int) = {
+    if(this.world.gamefield.contains(position)) {
+    val content = this.world.gamefield(position)
+    content.causeDmg(dmg)
+    if(content.typeString == "Wall" && content.isDestroyed) {
+      this.world.gamefield.update(new Empty(position), position)
+    }
+  }
   }
   
   def outOfGame()
@@ -26,15 +62,15 @@ abstract class Ammunition(val world: World)  {
 
 
 /**flying object*/
-class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, val world: World, val ammunition: Ammunition) extends GameObject {
+class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, val world: World, val ammunition: Ammunition) {
   
   val startPosition = new Vector2(startPos.x, startPos.y)
-  var speed = this.calcSpeedVect(angle/255.0*math.Pi, power/255.0)
+  var speed = this.calcSpeedVect((255-angle)/255.0*math.Pi, power/255.0)
   var position = this.startPosition
   var time = 0.0
   
   private def calcSpeedVect(angle: Double, power: Double): Vector2 = {
-    new Vector2(-1 * math.acos(angle),math.asin(angle)) * power * Ammunition.MULTIPLIER * this.massMultiplier
+    new Vector2(math.acos(angle),math.asin(angle)) * power * Ammunition.MULTIPLIER * this.massMultiplier
   }
   
   private def calcXPos(dt: Double): Double = this.startPosition.x+this.speed.x*dt
@@ -67,8 +103,6 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   def getPosition: Pos = new Pos(this.position.x.toInt, this.position.y.toInt)
   
   def getPositionVector = this.position
-  
-  def typeString = "Bullet"
   
 }
 

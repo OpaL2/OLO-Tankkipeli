@@ -56,7 +56,19 @@ trait GameObject {
   
   def typeString: String
   
+  def causeDmg(dmg: Int): Unit
   
+  def isDestroyed: Boolean
+}
+
+abstract class DestroyableObject(private val Hp: Int) {
+  def getPosition: Pos
+  
+  def causeDmg(dmg: Int): Unit = this.Hp - dmg
+  
+  def getHp = this.Hp
+  
+  def isDestroyed: Boolean = this.Hp <= 0
 }
 
 class Empty(private var pos: Pos) extends GameObject {
@@ -67,15 +79,18 @@ class Empty(private var pos: Pos) extends GameObject {
   
   def typeString = "Empty"
   
+  def isDestroyed = false
+  
+  def causeDmg(dmg: Int): Unit = Unit  
 }
 
-class Wall(private var pos: Pos) extends GameObject {
+class Wall(private var pos: Pos) extends DestroyableObject(World.WALLHP) with GameObject {
+  
   def getPosition = this.pos
   
   def setPosition(location: Pos) = this.pos = location
   
   def typeString = "Wall"
-  
 }
 
 class Pos(val x: Int, val y: Int) {
@@ -87,4 +102,11 @@ class Pos(val x: Int, val y: Int) {
   def up: Pos = new Pos(this.x, this.y + 1)
   
   def down: Pos = new Pos(this.x, this.y - 1)
+  
+  override def equals(other: Any) = {
+    other match {
+      case other : Pos => this.x == other.x && this.y == other.y
+      case _ => false
+    }
+  }
 }
