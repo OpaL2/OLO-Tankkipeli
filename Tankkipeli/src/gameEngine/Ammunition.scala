@@ -77,7 +77,8 @@ abstract class Ammunition(val world: World)  {
 class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, val world: World, val ammunition: Ammunition) {
   
   val startPosition = new Vector2(startPos.x, startPos.y)
-  var speed = this.calcSpeedVect((255-angle)/255.0*math.Pi, power/255.0)
+  val startSpeed = this.calcSpeedVect((255-angle)/255.0*math.Pi, power/255.0)
+  var speed = this.startSpeed
   var position = this.startPosition
   var time = 0.0
   
@@ -85,11 +86,17 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
     new Vector2(math.acos(angle),math.asin(angle)) * power * Ammunition.MULTIPLIER * this.massMultiplier
   }
   
-  private def calcXPos(dt: Double): Double = this.startPosition.x+this.speed.x*dt
+  private def calcXPos(dt: Double): Double = this.startPosition.x+this.startSpeed.x*dt
     
-  private def calcYPos(dt: Double): Double = this.startPosition.y+this.speed.y*dt-0.5*Ammunition.GRAVITY*dt*dt
+  private def calcYPos(dt: Double): Double = this.startPosition.y+this.startSpeed.y*dt-0.5*Ammunition.GRAVITY*dt*dt
   
   private def calcPos(): Vector2 = new Vector2(this.calcXPos(this.time), this.calcYPos(this.time))
+  
+  private def calcXSpeed(dt: Double): Double = this.startSpeed.x
+  
+  private def calcYSpeed(dt: Double): Double = this.startSpeed.y-Ammunition.GRAVITY*dt
+  
+  private def calcSpeed(): Vector2 = new Vector2(this.calcXSpeed(this.time), this.calcYSpeed(this.time))
   
   private def testCollision(): Boolean = !this.world.gamefield.isEmpty(this.getPosition)
   
@@ -97,6 +104,7 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   def update(dt: Double): Unit= {
     this.time = this.time + dt
     this.position = this.calcPos()
+    this.speed = this.calcSpeed()
     if (this.testCollision()) {
       if(this.world.gamefield.contains(this.getPosition)) {
         this.ammunition.explode(this.getPosition)
@@ -115,6 +123,8 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   def getPosition: Pos = new Pos(this.position.x.toInt, this.position.y.toInt)
   
   def getPositionVector = this.position
+  
+  def getSpeedVector = this.speed
   
 }
 
