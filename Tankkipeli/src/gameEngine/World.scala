@@ -73,6 +73,9 @@ class World (width: Int, height: Int) {
   /**makes currentTank selection to forward by one*/
   def nextTank: Unit = this.tankList.nextItem()
   
+  /**returns all tanks*/
+  def getTanks: Vector[Tank] = this.tankList.toVector()
+  
   override def toString() = this.gamefield.toString()
   
   def addBullet(bullet: Bullet) = this.bulletBuffer.append(bullet)
