@@ -90,13 +90,14 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
   
-  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
+  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower - amount)
   
   def getCannonAngle = this.shootDirection
   
   def getShootPower = this.shootPower
   
   def shoot(): Unit = {
+    if(!this.magazine.isEmpty)
     this.magazine.pop().shoot(this.position, this.shootDirection, this.shootPower)
   }
   

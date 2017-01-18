@@ -76,16 +76,31 @@ class paintWorld(val world: World) extends Panel {
       val y0 = Help.WorldYToUI(pos.y) + offset
       val x1 = math.round((x0 + math.cos(angle)* len)).toInt
       val y1 = math.round((y0 - math.sin(angle)* len)).toInt  
-    
+      
+      g.setColor(Color.BLACK)
       g.drawLine(x0, y0, x1, y1)
     }
     
     def drawPowerIndicator(tank: Tank): Unit = {
       //draws shoot power indicator for tank
+      val pos = tank.vectorPosition
+      val size = TankGame.imageSize - 4
+      val width = TankGame.imageSize/4
+      val relativeHeight= tank.getShootPower.toDouble/255
+      val height = (TankGame.imageSize*relativeHeight*1.5).toInt
+      val x = Help.WorldXToUI(pos.x) + (size*1.2).toInt - width + 6
+      val y = Help.WorldYToUI(pos.y) + size - height
+      
+      g.setColor(new Color((relativeHeight*255).toInt,255-(relativeHeight*255).toInt,0))
+      g.fillRect(x, y, width, height)
+      g.setColor(Color.BLACK)
+      g.drawRect(x,y,width, height)
     }
     
     drawBarrel(playerTank)
     drawBarrel(world.getTanks.filter(_.id == "AI")(0))
+    
+    drawPowerIndicator(playerTank)
     
     //draw bullets
     
@@ -120,6 +135,20 @@ class paintWorld(val world: World) extends Panel {
     case KeyPressed(_, Key.Down, _, _) => {
       if(playerTank())
         world.currentTank.turnCannonLeft(1)
+    }
+    case KeyPressed(_, Key.W, _, _) => {
+      if(playerTank())
+        world.currentTank.increaseShootPower(1)
+    }
+    case KeyPressed(_, Key.S, _, _) => {
+      if(playerTank())
+        world.currentTank.decreaseShootPower(1)
+    }
+    
+    case KeyPressed(_, Key.Space, _, _) => {
+      if(playerTank())
+        world.currentTank.shoot()
+        world.nextTank
     }
 
   }
