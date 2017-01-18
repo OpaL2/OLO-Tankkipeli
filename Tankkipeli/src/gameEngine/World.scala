@@ -14,6 +14,7 @@ object World {
   val DMGDIVIDER = 3
   val MAXDMGITER = 3
   val TANKINITIALFUEL = 100
+  val TANKSPEED = 0.1
 }
 
 class World (width: Int, height: Int) {
@@ -26,7 +27,7 @@ class World (width: Int, height: Int) {
   private var bulletBuffer = Buffer.empty[Bullet]
   
   //generating terrain
-  this.setFloor(GenTerrain.generate(5, this.width, 4))
+  this.setFloor(GenTerrain.generate(5, this.width, 2))
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
@@ -93,8 +94,8 @@ class World (width: Int, height: Int) {
   
   /**call this mehtod to make ammunitions fly, use small dt value, */
   def update(dt: Double) = {
-    this.bulletBuffer.foreach { x => x.update(dt) }
-    this.tankList.foreach(_.update)
+    this.bulletBuffer.foreach { x => x.update(dt/100) }
+    this.tankList.foreach(_.update(dt/100))
   }
   
 }

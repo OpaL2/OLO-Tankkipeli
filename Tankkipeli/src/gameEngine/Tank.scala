@@ -17,6 +17,8 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private var shootPower = 128 //8-bit value
   private var fuel = World.TANKINITIALFUEL
   private val magazine = Stack.empty[Ammunition]
+  var vectorPosition= new Vector2(position.x, position.y)
+  var reachedDestination: Boolean = true
   
   //moving related methods
   
@@ -67,6 +69,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private def updateWorld(newPos: Pos): Boolean = {
     this.world.gamefield.update(new Empty(this.position), this.position)
     this.world.gamefield.update(this, newPos)
+    this.reachedDestination = false
     true
   }
   
@@ -127,7 +130,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   override def toString = this.id
   
   /**updates tank, aka checks that tank has ground below it*/
-  def update() = {
+  def update(dt:Double) = {
    //drops tank one position down if it does not have ground below it
    if(this.world.gamefield.isEmpty(this.position.down)) {
       this.updateWorld(this.position.down)
@@ -137,6 +140,26 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       this.world.gamefield.update(new Empty(this.position), this.position)
       this.causeDmg(10000)
     }
+    
+   //animates tank to move it's vectorPosition towards it's real position
+   
+    //determine move direction
+    val destination = new Vector2(this.position.x, this.position.y)
+    val direction = (destination - this.vectorPosition)
+    
+    //move if required
+    if(-0.1 > direction.x || 0.1 < direction.x || -0.1 > direction.y || 0.1 < direction.y) {
+      this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
+      //if( -0.1 > direction.y) this.vectorPosition = this.vectorPosition + ((new Vector2(0, -1))*dt)
+    }
+
+    
+    //if close enough, make vector position constant
+    else {
+      this.vectorPosition = new Vector2(this.position.x, this.position.y)
+      this.reachedDestination = true
+    }
+    
   }
   
   

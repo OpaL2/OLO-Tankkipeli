@@ -47,7 +47,7 @@ class paintWorld(val world: World) extends Panel {
     g.drawString(playerTank.getCurrentAmmunition, fract * 3 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
     
     
-    //prints gamefield 
+    //draws gamefield 
     for( y <- 0 until gamefield.height) {
       for( x <- 0 until gamefield.width) {
         if(gamefield.isWall(x, y)){
@@ -56,17 +56,22 @@ class paintWorld(val world: World) extends Panel {
           val img = Images.tileFull
           g.drawImage(img, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
         }
-        //TODO: muuta tankkien tulostus siistimmäksi, tehdään animaatio
-        else if(gamefield.isTank(x, y)) g.drawImage(Images.tank, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
       }
     }
+    
+    //draws tanks
+    world.getTanks.foreach( x => {
+      g.drawImage(Images.tank, Help.WorldXToUI(x.vectorPosition.x),
+          Help.WorldYToUI(x.vectorPosition.y), null)
+      }
+    )
     
     def drawBarrel(tank: Tank): Unit = {
     //draws shoot pointer to gamefield
       val len = TankGame.imageSize /2
       val offset = TankGame.imageSize/2 -1
-      val pos = tank.getPosition
-      val angle =math.Pi*(255 - playerTank.getCannonAngle)/255 //angle in deg
+      val pos = tank.vectorPosition
+      val angle =math.Pi*(255 - tank.getCannonAngle)/255 //angle in deg
       val x0 = Help.WorldXToUI(pos.x) + offset
       val y0 = Help.WorldYToUI(pos.y) + offset
       val x1 = math.round((x0 + math.cos(angle)* len)).toInt
@@ -93,23 +98,30 @@ class paintWorld(val world: World) extends Panel {
     this.repaint()
   }
   
+  def playerTank(): Boolean = world.currentTank.id == "Player"
+  
   //key listener
   listenTo(keys)
   reactions += {
     case KeyPressed(_, Key.Left,  _, _) => {
-      world.currentTank.moveLeft()
+      if(playerTank() && world.currentTank.reachedDestination) 
+        world.currentTank.moveLeft()
     }
     case KeyPressed(_, Key.Right, _, _) => {
-      world.currentTank.moveRight()
+      if(playerTank()&& world.currentTank.reachedDestination)
+        world.currentTank.moveRight()
     }
     
     case KeyPressed(_, Key.Up, _, _) => {
-      world.currentTank.turnCannonRight(1)
+      if(playerTank())
+        world.currentTank.turnCannonRight(1)
     }
     
     case KeyPressed(_, Key.Down, _, _) => {
-      world.currentTank.turnCannonLeft(1)
+      if(playerTank())
+        world.currentTank.turnCannonLeft(1)
     }
+
   }
   
   focusable = true

@@ -134,7 +134,13 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
 
 final class Vector2(val x: Double, val y: Double) {
   
-  def *(i: Double): Vector2 = new Vector2(x*i, y*i)
+  def *(i: Double): Vector2 = new Vector2(this.x*i, this.y*i)
   
-  def abs: Double = math.sqrt(x*x + y*y)
+  def abs: Double = math.sqrt(this.x*this.x + this.y*this.y)
+  
+  def -(other: Vector2): Vector2 = new Vector2(this.x - other.x, this.y - other.y)
+  
+  def +(other: Vector2): Vector2 = new Vector2(this.x + other.x, this.y + other.y)
+  
+  def unitVector(): Vector2 = new Vector2(this.x/this.abs, this.y/this.abs)
 }
