@@ -2,13 +2,12 @@ package GUI
 
 import gameEngine._
 import scala.swing._
-import javax.swing.ImageIcon
-import java.net.URL
 import java.awt.{Color, Graphics2D, Point, Graphics}
 import java.awt.image.BufferedImage
 import java.awt.RenderingHints
 import event._
 import gameEngine.Pos
+import gameEngine.World
 
 
 
@@ -20,6 +19,32 @@ class paintWorld(val world: World) extends Panel {
     
     //clearing screen before redraw
     g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+    g.setBackground(Color.WHITE)
+    
+    
+    //drawing info panel
+    
+    //drawing frame:
+    g.setColor(Color.BLACK)
+    g.drawRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), TankGame.InfoPanelHeight)
+    val fract = Help.WorldXToUI(TankGame.WorldWidth)/4
+    g.drawLine(fract, 0, fract, TankGame.InfoPanelHeight)
+    g.drawLine(fract*2, 0, fract*2, TankGame.InfoPanelHeight)
+    g.drawLine(fract*3, 0, fract*3, TankGame.InfoPanelHeight)
+    
+    //drawing lables:
+    g.drawString("Health:", 0 + TankGame.InfoPanelPaddings, 10 + TankGame.InfoPanelPaddings)
+    g.drawString("Fuel:", fract + TankGame.InfoPanelPaddings, 10 + TankGame.InfoPanelPaddings)
+    g.drawString("Ammunition:", fract * 2 + TankGame.InfoPanelPaddings, 10 + TankGame.InfoPanelPaddings)
+    g.drawString("Next ammunition:", fract * 3 + TankGame.InfoPanelPaddings, 10 + TankGame.InfoPanelPaddings)
+    
+    //drawing data:
+    val playerTank = world.getTanks.filter {_.id == "Player"}(0)
+    g.drawString(playerTank.getHp.toString + "/"+ World.TANKHP.toString , 0 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
+    g.drawString(playerTank.getFuelLevel.toString + "/" + World.TANKINITIALFUEL.toString, fract + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
+    g.drawString(playerTank.getMagazineSize.toString, fract * 2 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
+    g.drawString(playerTank.getCurrentAmmunition, fract * 3 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
+    
     
     //prints gamefield to GUI window
     for( y <- 0 until gamefield.height) {
@@ -36,6 +61,8 @@ class paintWorld(val world: World) extends Panel {
     
   }
   
+  
+  //timer for requesting updates
   Timer(100/20) {
     world.update(100/20)
     this.repaint()

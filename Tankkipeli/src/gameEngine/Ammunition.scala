@@ -11,17 +11,20 @@ object Ammunition{
 class BasicAmmunition(world: World) extends Ammunition(world) {
   val massMultiplier = 1.0
   val dmg = 50
+  val description = "Basic round"
 }
 
 class HeavyAmmunition(world: World) extends Ammunition(world) {
   val massMultiplier = 1.2
   val dmg = 70
+  val description = "Heavy missile"
 }
 
 abstract class Ammunition(val world: World)  {
   
   val massMultiplier: Double
   val dmg: Int
+  val description: String
 
   def shoot(startPos: Pos, angle: Int, power: Int) = {
     val bullet = new Bullet(startPos, angle, power, this.massMultiplier, this.world, this)
@@ -71,6 +74,8 @@ abstract class Ammunition(val world: World)  {
   
 //  /** currently does nothing, notifyes the ammunition that it is flied off the game*/
   def outOfGame() = Unit
+  
+  override def toString(): String = this.description
 }
 
 

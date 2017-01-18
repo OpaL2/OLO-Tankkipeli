@@ -11,15 +11,17 @@ object TankGame extends SimpleSwingApplication {
   
   //constants defining rest of the game
   val imageSize = 20 //image size in pixels, also defines size of single game square
-  val WorldWidth = 60
-  val WorldHeight = 40
+  val WorldWidth = 60 //gameEngine squares
+  val WorldHeight = 40 //gameEngine squares
+  val InfoPanelHeight = 50 //in pixels
+  val InfoPanelPaddings = 5 //in pixels
   
   val world = new World(WorldWidth, WorldHeight)
   val dim = new Dimension(Help.WorldXToUI(WorldWidth), Help.ScaleWorldYToUI(WorldHeight))
   val blue = new Color(0, 255, 0)
   
-  world.createTank("Samuel", 10)
-  world.createTank("Ismael", 40)
+  world.createTank("Player", 10)
+  world.createTank("AI", 40)
   
   def top = new MainFrame {
     title = "TankGame"

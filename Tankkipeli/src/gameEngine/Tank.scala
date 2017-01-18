@@ -107,7 +107,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def getMagazineSize = this.magazine.length
   
-  def getCurrentAmmunition = this.magazine.top
+  def getCurrentAmmunition = {
+    if(this.magazine.isEmpty) "None"
+    else this.magazine.top.toString
+  }
   
   
   //GameObject methods:
