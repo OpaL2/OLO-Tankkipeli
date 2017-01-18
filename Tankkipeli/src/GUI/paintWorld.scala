@@ -107,7 +107,7 @@ class paintWorld(val world: World) extends Panel {
   }
   
   
-  //timer for requesting updates
+  //timer for requesting updates, this stuff is runned regulary
   Timer(100/20) {
     world.update(100/20)
     this.repaint()
