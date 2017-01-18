@@ -13,13 +13,21 @@ class Gamefield(val width: Int, val height: Int) {
   
   def elementAt(location: Pos) = this.contents(location.y)(location.x)
   
-  def apply(location: Pos) = this.contents(location.y)(location.x)
+  def apply(location: Pos): GameObject = this.contents(location.y)(location.x)
+  
+  def apply(x: Int, y: Int): GameObject = this.apply(new Pos(x,y))
   
   def isEmpty(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Empty"
   
+  def isEmpty(x: Int, y: Int): Boolean = this.isEmpty(new Pos(x,y))
+  
   def isWall(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Wall"
   
+  def isWall(x: Int, y: Int): Boolean = this.isWall(new Pos(x,y))
+  
   def isTank(location: Pos): Boolean = this.contains(location)  && this.apply(location).typeString == "Tank"
+  
+  def isTank(x: Int, y: Int): Boolean = this.isTank(new Pos(x,y))
   
   private def nearTank(location: Pos): Boolean = this.isTank(location) || this.isTank(location.up) || this.isTank(location.down)
   
