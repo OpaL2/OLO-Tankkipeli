@@ -31,6 +31,9 @@ class Gamefield(val width: Int, val height: Int) {
     
   def contains(location: Pos): Boolean = this.contains(location.x, location.y)
   
+  /**gets content of gamefield object as vector, notice coordinates are (y,x)*/
+  def toVector(): Vector[Vector[GameObject]] = this.contents.toVector.map(_.toVector)
+  
   override def toString() = {
     var str = ""
     this.contents.reverse.foreach(y => {
