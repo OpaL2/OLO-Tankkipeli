@@ -148,9 +148,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     val direction = (destination - this.vectorPosition)
     
     //move if required
-    if(-0.1 > direction.x || 0.1 < direction.x || -0.1 > direction.y || 0.1 < direction.y) {
+    val tmp = World.TANKANIMATIONBOUN
+    if(-tmp > direction.x || tmp < direction.x || -tmp > direction.y || tmp < direction.y) {
       this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
-      //if( -0.1 > direction.y) this.vectorPosition = this.vectorPosition + ((new Vector2(0, -1))*dt)
+      
     }
 
     

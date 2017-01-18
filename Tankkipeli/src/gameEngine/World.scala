@@ -15,6 +15,7 @@ object World {
   val MAXDMGITER = 3
   val TANKINITIALFUEL = 100
   val TANKSPEED = 0.1
+  val TANKANIMATIONBOUN = 0.05
 }
 
 class World (width: Int, height: Int) {
