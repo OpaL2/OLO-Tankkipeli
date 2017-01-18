@@ -33,7 +33,7 @@ class Gamefield(val width: Int, val height: Int) {
   
   def canMove(location: Pos): Boolean = this.contains(location)&&this.isEmpty(location)&&(!this.nearTank(location))
   
-  private def contains(x: Int, y: Int): Boolean = 
+  def contains(x: Int, y: Int): Boolean = 
     x >= 0 && x < this.width && 
     y >= 0 && y < this.height 
     

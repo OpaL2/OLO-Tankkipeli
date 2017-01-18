@@ -15,7 +15,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
   private var shootPower = 128 //8-bit value
-  private var fuel = 100
+  private var fuel = World.TANKINITIALFUEL
   private val magazine = Stack.empty[Ammunition]
   
   //moving related methods
@@ -77,7 +77,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def getFuelLevel = this.fuel
   
-  private def canMove: Boolean = this.fuel > 0
+  private def canMove: Boolean = this.fuel > 0 && (!this.isDestroyed)
   
   //cannon related methods:
   
