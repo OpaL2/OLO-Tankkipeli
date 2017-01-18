@@ -7,10 +7,12 @@ import java.awt.RenderingHints
 
 /**object storing all images used in game, also contains function for creating them*/
 object Images {
+    
   
-    def loadImage(path: String) = {
+  /**loads images from given path, and scales them to TankGame.imageSize size*/  
+  def loadImage(path: String) = {
   
-    val image: BufferedImage = ImageIO.read(new File("./assets/tank.png"))
+    val image: BufferedImage = ImageIO.read(new File("./assets/" + path))
     val scaledImage = new BufferedImage(TankGame.imageSize,TankGame.imageSize,image.getType())
     val d = scaledImage.createGraphics()
     d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
@@ -20,4 +22,16 @@ object Images {
     scaledImage
   }
   
+    
+  //terraing images
+  val rampLeftRight = loadImage("ramp_left_right.png")
+  val rampRightLeft = loadImage("ramp_right_left.png")
+  val tileFull = loadImage("tile_full.png")
+  val tileDown = loadImage("tile_down.png")
+  val tileLeft = loadImage("tile_left.png")
+  val tileRight = loadImage("tile_right.png")
+  val tileUp = loadImage("tile_up.png")
+  
+  //tank image
+  val tank = loadImage("tank.png")
 }

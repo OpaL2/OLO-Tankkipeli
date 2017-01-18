@@ -7,16 +7,15 @@ import event._
 
 object TankGame extends SimpleSwingApplication {
   
-  val imageSize = 15 //image size in pixels
+  //constants defining rest of the game
+  val imageSize = 20 //image size in pixels, also defines size of single game square
+  val WorldWidth = 60
+  val WorldHeight = 40
   
-  val floor = Vector.fill(50)(10)
-  val ceiling = Vector.fill(50)(40)
-  val world = new World(50, 50)
-  val dim = new Dimension(1000, 1000)
+  val world = new World(WorldWidth, WorldHeight)
+  val dim = new Dimension(Help.WorldXToUI(WorldWidth), Help.ScaleWorldYToUI(WorldHeight))
   val blue = new Color(0, 255, 0)
   
-  world.setFloor(floor)
-  world.setCeiling(ceiling)
   world.createTank("Samuel", 10)
   world.createTank("Ismael", 40)
   

@@ -8,7 +8,7 @@ import scala.Vector
  * bottom or top of the screen. Length is the length of the vector needed and intensity affects the 
  * differences in the terrain.*/ 
 
-class GenTerrain {
+object GenTerrain {
   
   val randy = new Random
   

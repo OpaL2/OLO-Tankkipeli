@@ -25,6 +25,9 @@ class World (width: Int, height: Int) {
   private val explosionStack = Stack.empty[Pos]
   private var bulletBuffer = Buffer.empty[Bullet]
   
+  //generating terrain
+  this.setFloor(GenTerrain.generate(5, this.width, 4))
+  
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
     var x = 0
