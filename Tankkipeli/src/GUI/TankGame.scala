@@ -7,6 +7,8 @@ import event._
 
 object TankGame extends SimpleSwingApplication {
   
+  val imageSize = 15 //image size in pixels
+  
   val floor = Vector.fill(50)(10)
   val ceiling = Vector.fill(50)(40)
   val world = new World(50, 50)
