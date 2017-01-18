@@ -2,7 +2,9 @@ package GUI
 
 import gameEngine._
 import scala.swing._
+import scala.swing.event._
 import java.awt.{Color, Graphics2D}
+import java.awt.event._
 import event._
 
 object TankGame extends SimpleSwingApplication {
@@ -28,6 +30,8 @@ object TankGame extends SimpleSwingApplication {
       preferredSize = dim
     }
     
+
+    
     contents = gameWindow
     
     this.peer.setResizable(false) //setting window to non resizeable
@@ -36,3 +40,15 @@ object TankGame extends SimpleSwingApplication {
   
 }
 
+
+/** timer object for triggering redraw and update*/
+object Timer {
+  def apply(interval: Int, repeats: Boolean = true)(op: => Unit) {
+    val timeOut = new javax.swing.AbstractAction() {
+      def actionPerformed(e : java.awt.event.ActionEvent) = op
+    }
+    val t = new javax.swing.Timer(interval, timeOut)
+    t.setRepeats(repeats)
+    t.start()
+  }
+}

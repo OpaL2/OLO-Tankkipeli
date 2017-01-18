@@ -24,13 +24,15 @@ object Images {
   
     
   //terraing images
-  val rampLeftRight = loadImage("ramp_left_right.png")
-  val rampRightLeft = loadImage("ramp_right_left.png")
+  val tileLeftRight = loadImage("ramp_left_right.png")
+  val tileRightLeft = loadImage("ramp_right_left.png")
   val tileFull = loadImage("tile_full.png")
   val tileDown = loadImage("tile_down.png")
   val tileLeft = loadImage("tile_left.png")
   val tileRight = loadImage("tile_right.png")
   val tileUp = loadImage("tile_up.png")
+  //val tileUpCone = ???
+  //val tileDownCone = ???
   
   //tank image
   val tank = loadImage("tank.png")
