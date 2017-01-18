@@ -26,7 +26,7 @@ class World (width: Int, height: Int) {
   private var bulletBuffer = Buffer.empty[Bullet]
   
   //generating terrain
-  this.setFloor(GenTerrain.generate(5, this.width, 4))
+  this.setFloor(GenTerrain.generate(5, this.width, 2))
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {

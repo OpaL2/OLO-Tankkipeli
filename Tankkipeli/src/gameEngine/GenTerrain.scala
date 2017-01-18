@@ -1,8 +1,9 @@
 package gameEngine
 
 import scala.util.Random
-import scala.math._
+import scala.math.abs
 import scala.Vector
+import scala.collection.mutable.Buffer
 
 /* This class generates random vector for gameField creation. It takes base value for distance from the
  * bottom or top of the screen. Length is the length of the vector needed and intensity affects the 
@@ -48,7 +49,43 @@ object GenTerrain {
     }
   }
   
-  //Counts average of two numbers and returns int.
+  // the tank location picker (first most useless comme)
+  
+  def tankLocation(length: Int) = abs(randy.nextInt() % length)
+  
+  // fills the clips (most pointle)
+  
+  def fillClips(tanks: Int, clips: Int, world: World) = {
+    
+    val basicAmount = abs(randy.nextInt % clips)
+    val heavyAmount = clips - basicAmount
+    
+    def ammoSuffler = {
+      val ammo = Buffer[Ammunition]()
+      
+      var b = basicAmount
+      var h = heavyAmount
+      
+      while (b > 0 || h > 0) {
+        if(abs(randy.nextInt()%2) == 0 && b > 0) {
+          ammo += new BasicAmmunition(world)
+          b -= 1
+        } else if(h > 0){
+          ammo += new HeavyAmmunition(world)
+          h -= 1
+        } else {
+          ammo += new BasicAmmunition(world)
+          b -= 1
+        }
+      }
+      ammo.toVector
+    }
+    
+    Vector.tabulate(tanks)(ammoSuffler)
+    
+  }
+  
+  /* Counts average of two numbers and returns int. */
   
   private def average(a: Int, b: Int) = (a+b)/2
   
