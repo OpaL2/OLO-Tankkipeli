@@ -1,7 +1,8 @@
-package GUI
+package gameEngine
 
 import scala.util.Random
 import scala.math._
+import scala.Vector
 
 /* This class generates random vector for gameField creation. It takes base value for distance from the
  * bottom or top of the screen. Length is the length of the vector needed and intensity affects the 

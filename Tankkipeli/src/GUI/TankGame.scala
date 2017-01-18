@@ -7,35 +7,31 @@ import event._
 
 object TankGame extends SimpleSwingApplication {
   
-  val floor = Vector.fill(500)(100)
-  val ceiling = Vector.fill(500)(400)
-  val world = new World(500, 500)
-  val dim = new Dimension(500, 500)
+  val floor = Vector.fill(50)(10)
+  val ceiling = Vector.fill(50)(40)
+  val world = new World(50, 50)
+  val dim = new Dimension(1000, 1000)
   val blue = new Color(0, 255, 0)
   
   world.setFloor(floor)
   world.setCeiling(ceiling)
-  world.createTank("Samuel", 100)
-  world.createTank("Ismael", 400)
-  
-  def onDraw(g: Graphics2D) = {
-    
-  }
-  
-  val mainTable = new Table(500, 500) {
-    preferredSize = dim
-    focusable = true
-    
-  }
-  
-  def paint(g: Graphics2D) {
-    g.setColor(blue)
-    
-  }
+  world.createTank("Samuel", 10)
+  world.createTank("Ismael", 40)
   
   def top = new MainFrame {
     title = "TankGame"
-    contents = mainTable
+    
+    preferredSize = dim
+    
+    val gameWindow = new paintWorld(world) {
+      preferredSize = dim
+    }
+    
+    contents = gameWindow
+    
+    this.peer.setResizable(false) //setting window to non resizeable
+    this.peer.setLocationRelativeTo(null)
   }
   
 }
+

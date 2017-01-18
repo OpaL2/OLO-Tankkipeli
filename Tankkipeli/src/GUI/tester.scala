@@ -1,5 +1,7 @@
 package GUI
 
+import gameEngine.GenTerrain
+
 object tester extends App {
   
   val n = new GenTerrain
