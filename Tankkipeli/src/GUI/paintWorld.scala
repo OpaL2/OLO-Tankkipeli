@@ -8,7 +8,8 @@ import java.awt.RenderingHints
 import event._
 import gameEngine.Pos
 import gameEngine.World
-
+import scala.math
+import gameEngine.Tank
 
 
 class paintWorld(val world: World) extends Panel {
@@ -46,7 +47,7 @@ class paintWorld(val world: World) extends Panel {
     g.drawString(playerTank.getCurrentAmmunition, fract * 3 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
     
     
-    //prints gamefield to GUI window
+    //prints gamefield 
     for( y <- 0 until gamefield.height) {
       for( x <- 0 until gamefield.width) {
         if(gamefield.isWall(x, y)){
@@ -55,9 +56,33 @@ class paintWorld(val world: World) extends Panel {
           val img = Images.tileFull
           g.drawImage(img, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
         }
+        //TODO: muuta tankkien tulostus siistimmäksi, tehdään animaatio
         else if(gamefield.isTank(x, y)) g.drawImage(Images.tank, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
       }
     }
+    
+    def drawBarrel(tank: Tank): Unit = {
+    //draws shoot pointer to gamefield
+      val len = TankGame.imageSize /2
+      val offset = TankGame.imageSize/2 -1
+      val pos = tank.getPosition
+      val angle =math.Pi*(255 - playerTank.getCannonAngle)/255 //angle in deg
+      val x0 = Help.WorldXToUI(pos.x) + offset
+      val y0 = Help.WorldYToUI(pos.y) + offset
+      val x1 = math.round((x0 + math.cos(angle)* len)).toInt
+      val y1 = math.round((y0 - math.sin(angle)* len)).toInt  
+    
+      g.drawLine(x0, y0, x1, y1)
+    }
+    
+    def drawPowerIndicator(tank: Tank): Unit = {
+      //draws shoot power indicator for tank
+    }
+    
+    drawBarrel(playerTank)
+    drawBarrel(world.getTanks.filter(_.id == "AI")(0))
+    
+    //draw bullets
     
   }
   
@@ -76,6 +101,14 @@ class paintWorld(val world: World) extends Panel {
     }
     case KeyPressed(_, Key.Right, _, _) => {
       world.currentTank.moveRight()
+    }
+    
+    case KeyPressed(_, Key.Up, _, _) => {
+      world.currentTank.turnCannonRight(1)
+    }
+    
+    case KeyPressed(_, Key.Down, _, _) => {
+      world.currentTank.turnCannonLeft(1)
     }
   }
   
