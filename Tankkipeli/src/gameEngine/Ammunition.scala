@@ -119,8 +119,6 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   private def removeSelf() = this.world.removeBullet(this)
   
-  def setPosition(location: Pos) = this.position = new Vector2(location.x, location.y)
-  
   def getPosition: Pos = new Pos(this.position.x.toInt, this.position.y.toInt)
   
   def getPositionVector = this.position
