@@ -31,6 +31,7 @@ object Images {
   val tileRight = loadImage("tile_right.png")
   val tileUp = loadImage("tile_up.png")
   val tilePeak = loadImage("tile_peak.png")
+  val tileLeftAndRight = loadImage("tile_leftandright.png")
   //val tileUpCone = ???
   //val tileDownCone = ???
   

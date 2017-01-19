@@ -117,7 +117,7 @@ class PaintWorld() extends Panel {
             
             //both straight walls
             if(!gamefield.isWall(x-1, y) && !gamefield.isWall(x+1, y)) {
-              img = Images.tileDown
+              img = Images.tileLeftAndRight
             }
           }
           
