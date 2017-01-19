@@ -37,20 +37,21 @@ class AI (val difficulty : Int, world: World){
     val leftOrRight = (if (ownp.x >enemyp.x) r else l)
     // angle = 0-255 90deg=127,5 45deg=63,75 135deg=191,25 
     var shootingAngle = (if (leftOrRight == "right") 191 else 64  )
-    
+    // distance between tanks
     var tankdistance =  math.sqrt((ownp.x + enemyp.x)^2 + (ownp.y + enemyp.y)^2 )
-    
+    // ammo that has been selected
     var currentAmmo = world.currentTank.getCurrentAmmunition
-    
+    // shooting power
     var shootpower = ((255/world.gamefield.width)*tankdistance).toInt
-    
+    // test hit location
     var hitlocation = (world.currentTank.testshoot(shootingAngle, shootpower))
-    
+    //distance between testhit location and target  
     var hitdistance = math.sqrt((hitlocation.x + enemyp.x)^2 + (hitlocation.y + enemyp.y)^2 )
-    
+    //increment for adding and decreasing power
     var powerincrement = math.sqrt(hitdistance).toInt
-    
+    // increment for angles
     var angleincrement = 128/difficulty
+    
       
     if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootpower += powerincrement
     else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootpower -= powerincrement
