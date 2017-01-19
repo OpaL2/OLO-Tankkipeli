@@ -4,14 +4,38 @@ package gameEngine
 
 import scala.math
 
-
-class AI (val difficulty : Int){
-  var opponent_position = null
-  var ai_position = null
+// AI is the class for all AI operations it takes difficulty and World as input
+class AI (val difficulty : Int, world: World){
   
+  //just easier not beautiful
+  val r :String = "right"
+  val l :String = "left"
+ 
   
-  def shoot{???} 
-  def target {???}
+  // move takes in positions and spits out right,left or null (direction of AI movement)
+  def move(ownp: Pos, enemyp: Pos) = {
+      
+    val remainingammo = world.currentTank.getMagazineSize
+    val remainingfuel = world.currentTank.getFuelLevel
+   
+    if (remainingfuel > 0) {
+      if (remainingammo >0 ){
+     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true ) l
+     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
+     else null
+   } 
+   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
+   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true) l
+   else null
+    }
+    else null
+  }
+  
+  //shoot takes in positions and spits out parametres for shooting it 
+  def shoot(ownposition: Pos, enemyposition: Pos) = {
+    ???
+    } 
+  
 
 }
 
