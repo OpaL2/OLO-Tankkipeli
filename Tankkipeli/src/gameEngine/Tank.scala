@@ -134,6 +134,8 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       this.magazine.pop().shoot(this.position, this.shootDirection, this.shootPower)
       this.world.sounds.playSound(SoundEngine.cannonFire)
     }
+    this.world.nextTank
+    this.world.endTurn = true
   }
   //testshoot is used by AI to check if it hits opponent or not. 
   //Returns position of the hit that can be compared to position of the enemy 

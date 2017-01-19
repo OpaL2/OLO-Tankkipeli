@@ -10,6 +10,16 @@ class AI (val difficulty : Int, world: World){
   //just easier not beautiful
   val r :String = "right"
   val l :String = "left"
+  
+  var movesToTake = 0
+  var startedTurn = false
+  var shooted = false
+  
+  def initTurn() = {
+    this.startedTurn = true
+    this.movesToTake = 5
+    this.shooted = false
+  }
  
   
   // move takes in positions and spits out right,left or null (direction of AI movement)
@@ -40,8 +50,6 @@ class AI (val difficulty : Int, world: World){
     
     var tankdistance =  math.sqrt((ownp.x + enemyp.x)^2 + (ownp.y + enemyp.y)^2 )
     
-    var currentAmmo = world.currentTank.getCurrentAmmunition
-    
     var shootpower = ((255/world.gamefield.width)*tankdistance).toInt
     
     var hitlocation = (world.currentTank.testshoot(shootingAngle, shootpower))
@@ -51,19 +59,26 @@ class AI (val difficulty : Int, world: World){
     var powerincrement = math.sqrt(hitdistance).toInt
     
     var angleincrement = 128/difficulty
+    
+    def calcShoot(): Unit = {
+      while(true) {
+        if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootpower += powerincrement
+        else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootpower -= powerincrement
+        else return
       
-    if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootpower += powerincrement
-    else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootpower -= powerincrement
-    else world.currentTank.AIshoot(shootingAngle, shootpower)
-      
-    if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootingAngle -= angleincrement
-    else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootingAngle += angleincrement
-    else world.currentTank.AIshoot(shootingAngle, shootpower)
+        if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootingAngle -= angleincrement
+        else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootingAngle += angleincrement
+        else return
+      }
+    }
+    
+    calcShoot()
+    
+    this.shooted = true
+    world.currentTank.AIshoot(shootingAngle, shootpower)
     
     
-    
-    
-    } 
+  } 
    
 
 }

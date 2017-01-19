@@ -21,7 +21,7 @@ class PaintWorld() extends Panel {
   var firstGame = true
   
   //creating game:
-  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
+  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 1)
   
   world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
   world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
@@ -29,7 +29,7 @@ class PaintWorld() extends Panel {
   world.addAmmosToTanks(10)
   
   def newGame(): Unit = {
-    world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
+    world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 1)
   
     world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
     world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
@@ -319,8 +319,6 @@ class PaintWorld() extends Panel {
     case KeyPressed(_, Key.Space, _, _) => {
       if(playerTank()){
         world.currentTank.shoot()
-        world.nextTank
-        world.endTurn = true
       }
     }
     

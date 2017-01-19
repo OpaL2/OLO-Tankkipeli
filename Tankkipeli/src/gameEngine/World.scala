@@ -18,7 +18,7 @@ object World {
   val TANKANIMATIONBOUN = 0.1
 }
 
-class World (width: Int, height: Int) {
+class World (width: Int, height: Int, difficulty: Int) {
 
  
   //creating gamefield and tank list
@@ -32,6 +32,8 @@ class World (width: Int, height: Int) {
   //creating sound engine
   val sounds = new SoundEngine
   
+  //creating AI
+  val ai = new AI(difficulty, this)
   
   //generating terrain
   this.setFloor(GenTerrain.generate(8, width, 2))
@@ -111,6 +113,26 @@ class World (width: Int, height: Int) {
     this.bulletBuffer.foreach { x => x.update(dt) }
     this.tankList.foreach(_.update(dt))
     if(this.bulletBuffer.isEmpty) this.endTurn = false
+    
+    //make AI to play his turn here
+    if(!this.endTurn && this.currentTank.id == "AI") {
+      //ai playing turn
+      //if not started turn, init it
+      if(!this.ai.startedTurn) this.ai.initTurn()
+      
+      //then trying to move as many times as can
+      if(this.ai.movesToTake > 0) {
+        val ret = this.ai.move(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
+        if(ret != null) this.ai.movesToTake -= 1
+        else this.ai.movesToTake = 0
+      }
+      //if not moving, then shoot
+      else if(!this.ai.shooted) { 
+        this.ai.shoot(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
+      }
+      
+    }
+    
   }
   
 }
