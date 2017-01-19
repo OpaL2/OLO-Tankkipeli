@@ -23,8 +23,6 @@ class AI (val difficulty : Int, world: World){
     this.startedTurn = true
     this.movesToTake = math.abs(this.rand.nextInt()) % (this.difficulty+4)
     this.shooted = false
-    println("turn started")
-    println(this.movesToTake)
   }
  
   
@@ -62,10 +60,10 @@ class AI (val difficulty : Int, world: World){
     //distance between testhit location and target  
     while(true) {
       if(hitPos == enemyPosition || power > 255){
+        
         //in this case we shoot and return from this function
         if(power > 255) {
-          //trying to make sure that tank does not shoot itself
-          maxPowerShoot()
+          angle = if(ownp.x > enemyp.x) 70 else 180
         }
         variableShoot()
         this.shooted = true
@@ -115,16 +113,6 @@ class AI (val difficulty : Int, world: World){
       else amount
     }
     
-    def maxPowerShoot(): Unit = {
-      while (true) {
-        if(math.abs(ownp.x - hitPos.x) < 4) {
-          if(ownp.x - hitPos.x > 0) positiveError
-          else negativeError
-          
-        }
-        else return
-      }
-    }
   } 
    
 

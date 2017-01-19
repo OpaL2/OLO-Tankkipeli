@@ -82,6 +82,7 @@ class World (width: Int, height: Int, difficulty: Int) {
   
   def addAmmosToTanks(rounds: Int): Unit = {
     val ammo = GenTerrain.fillClips(this.tankList.toVector().size, rounds , this)
+    println(ammo)
     for(i <- 0 until ammo.size) {
       this.tankList.toVector()(i).addAmmunition(ammo(i))
     }
@@ -129,7 +130,6 @@ class World (width: Int, height: Int, difficulty: Int) {
       }
      //if not moving, then shoot
      if(this.currentTank.reachedDestination && this.ai.movesToTake == 0 && !this.ai.shooted) {
-         println("started to shoot")
         this.ai.shoot(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
       }
     }

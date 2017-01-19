@@ -2,6 +2,7 @@ package gameEngine
 
 import scala.util.Random
 import scala.math.abs
+import scala.math
 import scala.Vector
 import scala.collection.mutable.Buffer
 
@@ -57,8 +58,8 @@ object GenTerrain {
   
   def fillClips(tanks: Int, clips: Int, world: World): Vector[Vector[Ammunition]] = {
     
-    val basicAmount = abs(randy.nextInt % clips)
-    val heavyAmount = clips - basicAmount
+    val heavyAmount = abs(randy.nextInt % (clips/4)) + (clips/4)
+    val basicAmount = clips - heavyAmount
     
     def ammoSuffler = {
       val ammo = Buffer[Ammunition]()
