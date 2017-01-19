@@ -94,7 +94,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   def getFuelLevel = this.fuel
   
   
-  private def canMove: Boolean = this.fuel > 0 && (!this.isDestroyed)
+  private def canMove: Boolean = this.fuel > 0 && (!this.isDestroyed) && this.reachedDestination
   
   //cannon related methods:
   

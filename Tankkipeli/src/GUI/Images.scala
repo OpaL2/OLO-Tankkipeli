@@ -10,7 +10,7 @@ object Images {
     
   
   /**loads images from given path, and scales them to TankGame.imageSize size*/  
-  def loadImage(path: String, size: Int = TankGame.imageSize) = {
+  def loadImage(path: String, size: Int = TankGame.imageSize): BufferedImage= {
   
     val image: BufferedImage = ImageIO.read(new File("./assets/" + path))
     val scaledImage = new BufferedImage(size,size,image.getType())

@@ -17,6 +17,9 @@ class PaintWorld() extends Panel {
   //flag determining if game is running
   var running = false
   
+  //flag determining, if this is a first start
+  var firstGame = true
+  
   //creating game:
   var world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
@@ -232,6 +235,15 @@ class PaintWorld() extends Panel {
     }
     if(world.endGame) drawEnd()
     
+    def drawStart(): Unit = {
+      g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+      g.drawString("Aloita peli painamalla Enter", 250, 250)
+      world.sounds.loopSound(SoundEngine.lobbyMusic)
+    }
+    
+    if(firstGame) drawStart()
+    
+    
   }
   
   //===================================================================================================================
@@ -254,17 +266,21 @@ class PaintWorld() extends Panel {
       StopCounter = StopCounter - 1
     }
     else{
+      //this is triggered after game is finished
       timer.stop()
+      running = false
+      world.sounds.stopSound(SoundEngine.music)
+      world.sounds.loopSound(SoundEngine.lobbyMusic)
     }
   }
   
   def startGame(): Unit = {
     timer.start
     world.sounds.loopSound(SoundEngine.music)
+    world.sounds.stopSound(SoundEngine.lobbyMusic)
     running = true
+    firstGame = false
   }
-  
-  startGame
   
   def playerTank(): Boolean = world.currentTank.id == "Player"
   
@@ -315,6 +331,13 @@ class PaintWorld() extends Panel {
         else SoundEngine.lobbyMusic.loop()
       }
       else world.sounds.mute()
+    }
+    
+    case KeyPressed(_, Key.Enter, _, _) => {
+      if(!running) {
+        this.newGame()
+        this.startGame()
+      }
     }
   }
   

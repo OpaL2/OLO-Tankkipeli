@@ -32,6 +32,17 @@ class Gamefield(val width: Int, val height: Int) {
   private def nearTank(location: Pos): Boolean = this.isTank(location) || this.isTank(location.up) || this.isTank(location.down)
   
   def canMove(location: Pos): Boolean = this.contains(location)&&this.isEmpty(location)&&(!this.nearTank(location))
+  
+  def doIFall(x: Int, y: Int): Boolean = this.doIFall(new Pos(x,y))
+  
+  def doIFall(pos: Pos): Boolean = {
+    var position = pos
+    while(this.contains(position)) {
+      if(this.isWall(position)) return true
+      position = position.down
+    }
+    false
+  }
  
   
   def contains(x: Int, y: Int): Boolean = 
