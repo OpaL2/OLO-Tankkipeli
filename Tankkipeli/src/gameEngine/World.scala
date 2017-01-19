@@ -8,12 +8,14 @@ import scala.collection.mutable.Stack
 /** object storing constants for game engine*/
 object World {
   val WALLHP = 20
-  val GRAVITY = 1.0
-  val MULTIPLIER = 1.0
+  val GRAVITY = 5.0
+  val MULTIPLIER = 20
   val TANKHP = 40
-  val DMGDIVIDER = 3
-  val MAXDMGITER = 3
+  val DMGDIVIDER = 2
+  val MAXDMGITER = 5
   val TANKINITIALFUEL = 100
+  val TANKSPEED = 0.5
+  val TANKANIMATIONBOUN = 0.05
 }
 
 class World (width: Int, height: Int) {
@@ -23,7 +25,11 @@ class World (width: Int, height: Int) {
   val gamefield = new gameEngine.Gamefield(width, height)
   private val tankList = List.empty[Tank]
   private val explosionStack = Stack.empty[Pos]
-  private var bulletBuffer = Buffer.empty[Bullet]
+  var bulletBuffer = Buffer.empty[Bullet]
+  var endGame = false
+  
+  //generating terrain
+  this.setFloor(GenTerrain.generate(5, width, 2))
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
@@ -67,6 +73,13 @@ class World (width: Int, height: Int) {
     else false
   }
   
+  def addAmmosToTanks(rounds: Int): Unit = {
+    val ammo = GenTerrain.fillClips(this.tankList.toVector().size, rounds , this)
+    for(i <- 0 until ammo.size) {
+      this.tankList.toVector()(i).addAmmunition(ammo(i))
+    }
+  }
+  
   /**get current tank in turn*/
   def currentTank: Tank = this.tankList.current.get
   
@@ -91,7 +104,7 @@ class World (width: Int, height: Int) {
   /**call this mehtod to make ammunitions fly, use small dt value, */
   def update(dt: Double) = {
     this.bulletBuffer.foreach { x => x.update(dt) }
-    this.tankList.foreach(_.update)
+    this.tankList.foreach(_.update(dt))
   }
   
 }

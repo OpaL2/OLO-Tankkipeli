@@ -2,40 +2,51 @@ package GUI
 
 import gameEngine._
 import scala.swing._
+import scala.swing.event._
 import java.awt.{Color, Graphics2D}
+import java.awt.event._
 import event._
+import javax.swing.Timer
 
 object TankGame extends SimpleSwingApplication {
   
-  val floor = Vector.fill(500)(100)
-  val ceiling = Vector.fill(500)(400)
-  val world = new World(500, 500)
-  val dim = new Dimension(500, 500)
-  val blue = new Color(0, 255, 0)
+  //constants defining rest of the game
+  val imageSize = 20 //image size in pixels, also defines size of single game square
+  val WorldWidth = 60 //gameEngine squares
+  val WorldHeight = 40 //gameEngine squares
+  val InfoPanelHeight = 50 //in pixels
+  val InfoPanelPaddings = 5 //in pixels
   
-  world.setFloor(floor)
-  world.setCeiling(ceiling)
-  world.createTank("Samuel", 100)
-  world.createTank("Ismael", 400)
-  
-  def onDraw(g: Graphics2D) = {
-    
-  }
-  
-  val mainTable = new Table(500, 500) {
-    preferredSize = dim
-    focusable = true
-    
-  }
-  
-  def paint(g: Graphics2D) {
-    g.setColor(blue)
-    
-  }
+  val dim = new Dimension(Help.WorldXToUI(WorldWidth), Help.ScaleWorldYToUI(WorldHeight))
   
   def top = new MainFrame {
     title = "TankGame"
-    contents = mainTable
+    
+    preferredSize = dim
+    
+    val gameWindow = new PaintWorld {
+      preferredSize = dim
+    }
+    
+
+    
+    contents = gameWindow
+    
+    this.peer.setResizable(false) //setting window to non resizeable
+    this.peer.setLocationRelativeTo(null)
   }
   
+}
+
+
+/** timer object for triggering redraw and update*/
+object Timer {
+  def apply(interval: Int, repeats: Boolean = true)(op: => Unit): Timer = {
+    val timeOut = new javax.swing.AbstractAction() {
+      def actionPerformed(e : java.awt.event.ActionEvent) = op
+    }
+    val t = new Timer(interval, timeOut)
+    t.setRepeats(repeats)
+    t
+  }
 }

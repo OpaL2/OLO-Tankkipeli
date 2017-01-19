@@ -11,12 +11,16 @@ object Tank{
 }
 
 /** class represents tank in a game, ALERT: Before executing any actions, check that tank is working, with isDestoryed method, none of the command methods will check this*/
-class Tank(val id: String,private var position: Pos, private val world: World) extends DestroyableObject(World.TANKHP) with GameObject {
+class Tank(val id: String,private var position: Pos, private val world: World) extends DestroyableObject(World.TANKHP) {
   
   private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
   private var shootPower = 128 //8-bit value
   private var fuel = World.TANKINITIALFUEL
   private val magazine = Stack.empty[Ammunition]
+  
+  //these properties are for tank animations only
+  var vectorPosition= new Vector2(position.x, position.y)
+  var reachedDestination: Boolean = true //check that this flag is true, before moving tank again
   
   //moving related methods
   
@@ -67,6 +71,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private def updateWorld(newPos: Pos): Boolean = {
     this.world.gamefield.update(new Empty(this.position), this.position)
     this.world.gamefield.update(this, newPos)
+    this.reachedDestination = false
     true
   }
   
@@ -87,27 +92,33 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
   
-  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
+  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower - amount)
   
   def getCannonAngle = this.shootDirection
   
   def getShootPower = this.shootPower
   
   def shoot(): Unit = {
+    if(!this.magazine.isEmpty)
     this.magazine.pop().shoot(this.position, this.shootDirection, this.shootPower)
   }
   
   
   //magazine related methdos:
-  def addAmmunition(items: Ammunition*) = {
+  def addAmmunition(items: Ammunition*): Unit = {
     items.foreach { this.magazine.push(_) }
   }
+  
+  def addAmmunition(items: Vector[Ammunition]): Unit =items.foreach { this.addAmmunition(_) }
   
   def getMagazine = this.magazine.toVector
   
   def getMagazineSize = this.magazine.length
   
-  def getCurrentAmmunition = this.magazine.top
+  def getCurrentAmmunition = {
+    if(this.magazine.isEmpty) "None"
+    else this.magazine.top.toString
+  }
   
   
   //GameObject methods:
@@ -123,10 +134,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   override def toString = this.id
   
-  /**updates tank, aka checks that tank has ground below it*/
-  def update() = {
+  /**updates tank*/
+  def update(dt:Double) = {
    //drops tank one position down if it does not have ground below it
-   if(this.world.gamefield.isEmpty(this.position.down)) {
+   if(this.reachedDestination && this.world.gamefield.isEmpty(this.position.down)) {
       this.updateWorld(this.position.down)
    }
     //triggered if tank is dropped out of the gamefield
@@ -134,6 +145,33 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       this.world.gamefield.update(new Empty(this.position), this.position)
       this.causeDmg(10000)
     }
+    
+   //animates tank to move it's vectorPosition towards it's real position
+   
+    //determine move direction
+    val destination = new Vector2(this.position.x, this.position.y)
+    val direction = (destination - this.vectorPosition)
+    
+    //move if required
+    val tmp = World.TANKANIMATIONBOUN
+    if(-tmp > direction.x || tmp < direction.x || -tmp > direction.y || tmp < direction.y) {
+      this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
+      
+    }
+
+    
+    //if close enough, make vector position constant
+    else {
+      this.vectorPosition = new Vector2(this.position.x, this.position.y)
+      this.reachedDestination = true
+    }
+    
+    //if tank is destroyded play explosion animation and trigger end game
+    if(this.isDestroyed) {
+      this.world.addExpolsionPosition(this.getPosition)
+      this.world.endGame = true
+    }
+    
   }
   
   
