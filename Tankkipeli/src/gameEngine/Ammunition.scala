@@ -31,7 +31,7 @@ case class HeavyAmmunition(override val world: World) extends Ammunition(world) 
   }
 }
 
-sealed abstract class Ammunition(val world: World)  {
+abstract class Ammunition(val world: World)  {
   
   val massMultiplier: Double
   val dmg: Int
@@ -147,7 +147,7 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
     }
   }
   
-  private def removeSelf() = this.world.removeBullet(this)
+  def removeSelf() = this.world.removeBullet(this)
   
   def getStartPos = new Pos(math.floor(this.startPosition.x).toInt, math.floor(this.startPosition.y).toInt)
   

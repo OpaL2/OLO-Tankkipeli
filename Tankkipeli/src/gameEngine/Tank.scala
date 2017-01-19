@@ -126,8 +126,52 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   //Returns position of the hit that can be compared to position of the enemy 
   //Testshoot does not consume any resources nor cause damage or have animations.
   def testshoot(angle :Int, power:Int):Pos ={
-    ???
+      val ang = Tank.clamp8bit(angle)
+      val pow = Tank.clamp8bit(power)
+      var dmg = 0
+      var mass = 0.0
+      
+      this.magazine.top match {
+        case x:BasicAmmunition => {
+          mass = x.massMultiplier
+          dmg = x.dmg
+        }
+        case x:HeavyAmmunition => {
+          mass = x.massMultiplier
+          dmg = x.dmg
+        }
+      }
+      val bullet = (new testAmmunition(dmg, mass)).testShoot(this.position, ang, pow)
+      
+      while(!bullet.isHit) {
+        bullet.update(1.0/100)
+      }
+      bullet.getPosition
+
     }
+  //these private classes are only meant to use by testShoot method
+  private class testAmmunition(val dmg: Int, val massMultiplier: Double) extends Ammunition(this.world) {
+    val description = "test ammo"
+    
+    def testShoot(startPos: Pos, angle: Int, power: Int): testBullet = {
+      new testBullet(startPos, angle, power, this.massMultiplier, this.world, this)
+    }
+    
+    override def explode(position: Pos) = Unit
+    
+    override def outOfGame() = Unit
+  }
+  
+  private class testBullet(startPos: Pos, angle: Int, power: Int, massMultiplier: Double, world: World, 
+      ammunition: Ammunition) extends Bullet(startPos, angle, power, massMultiplier, world, ammunition) {
+    
+    var isHit = false
+    
+    
+    override def removeSelf() = {
+      this.isHit = true
+    }
+  }
   
   
   //for AI-tank animations AIshoot.
