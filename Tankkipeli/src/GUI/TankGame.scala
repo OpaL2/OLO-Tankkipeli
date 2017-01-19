@@ -16,19 +16,14 @@ object TankGame extends SimpleSwingApplication {
   val InfoPanelHeight = 50 //in pixels
   val InfoPanelPaddings = 5 //in pixels
   
-  val world = new World(WorldWidth, WorldHeight)
   val dim = new Dimension(Help.WorldXToUI(WorldWidth), Help.ScaleWorldYToUI(WorldHeight))
-  val blue = new Color(0, 255, 0)
-  
-  world.createTank("Player", 10)
-  world.createTank("AI", 40)
   
   def top = new MainFrame {
     title = "TankGame"
     
     preferredSize = dim
     
-    val gameWindow = new paintWorld(world) {
+    val gameWindow = new PaintWorld {
       preferredSize = dim
     }
     

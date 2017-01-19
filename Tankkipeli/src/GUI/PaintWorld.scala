@@ -12,7 +12,12 @@ import scala.math
 import gameEngine.Tank
 
 
-class paintWorld(val world: World) extends Panel {
+class PaintWorld() extends Panel {
+  
+  val world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
+  
+  world.createTank("Player", 10)
+  world.createTank("AI", 40)
   
   override def paintComponent(g: Graphics2D) {
     
