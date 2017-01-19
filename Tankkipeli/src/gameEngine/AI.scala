@@ -23,22 +23,22 @@ class AI (val difficulty : Int, world: World){
  
   
   // move takes in positions and spits out right,left or null (direction of AI movement)
-  def move(ownp: Pos, enemyp: Pos) = {
+  def move(ownp: Pos, enemyp: Pos): String = {
       
     val remainingammo = world.currentTank.getMagazineSize
     val remainingfuel = world.currentTank.getFuelLevel
    
     if (remainingfuel > 0) {
       if (remainingammo >0 ){
-     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true && world.gamefield.doIFall(ownp.x-1, ownp.y) == false ) l
-     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) r
-     else null
+     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true && world.gamefield.doIFall(ownp.x-1, ownp.y) == false ) return l
+     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) return r
+     else return null
    } 
-   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) r
-   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true&& world.gamefield.doIFall(ownp.x-1, ownp.y) == false) l
-   else null
+   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) return r
+   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true&& world.gamefield.doIFall(ownp.x-1, ownp.y) == false) return l
+   else return null
     }
-    else null
+    else return null
   }
   
   //shoot takes in positions and spits out parametres for shooting it 

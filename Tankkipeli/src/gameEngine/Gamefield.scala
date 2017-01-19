@@ -38,10 +38,10 @@ class Gamefield(val width: Int, val height: Int) {
   def doIFall(pos: Pos): Boolean = {
     var position = pos
     while(this.contains(position)) {
-      if(this.isWall(position)) return true
+      if(this.isWall(position)) return false
       position = position.down
     }
-    false
+    true
   }
  
   

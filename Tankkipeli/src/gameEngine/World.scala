@@ -121,16 +121,16 @@ class World (width: Int, height: Int, difficulty: Int) {
       if(!this.ai.startedTurn) this.ai.initTurn()
       
       //then trying to move as many times as can
-      if(this.ai.movesToTake > 0) {
+      if(this.currentTank.reachedDestination && this.ai.movesToTake > 0) {
         val ret = this.ai.move(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
+        
         if(ret != null) this.ai.movesToTake -= 1
         else this.ai.movesToTake = 0
       }
       //if not moving, then shoot
-      else if(!this.ai.shooted) { 
+    /*  else if(!this.ai.shooted) { 
         this.ai.shoot(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
-      }
-      
+      }*/
     }
     
   }
