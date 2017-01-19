@@ -23,9 +23,16 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   var vectorPosition= new Vector2(position.x, position.y)
   var reachedDestination: Boolean = true //check that this flag is true, before moving tank again
   private var isFalling: Boolean = false
+  
+  //barrel sound and animation
   private var barrelMoving = false
   private var barrelMovingInt = 0
   private var barrelSoundPlaying = false
+  
+  //power set sound and animation
+  private var powerChange = false
+  private var powerChangeInt = 0
+  private var powerSoundPlaying = false
   
   //moving related methods
   
@@ -108,9 +115,15 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     this.barrelMoving = true
   }
   
-  def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
+  def increaseShootPower(amount: Int): Unit = {
+    this.shootPower = Tank.clamp8bit(this.shootPower + amount)
+    this.powerChange = true
+  }
   
-  def decreaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower - amount)
+  def decreaseShootPower(amount: Int): Unit = {
+    this.shootPower = Tank.clamp8bit(this.shootPower - amount)
+    this.powerChange = true
+  }
   
   def getCannonAngle = this.shootDirection
   
@@ -282,6 +295,22 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     }
     
     //make here object to play change power sounds
+    this.powerChangeInt = this.powerChangeInt + 1
+    
+    if(this.powerChange) {
+      this.powerChangeInt = 0
+      this.powerChange = false
+    }
+    
+    if((this.powerChangeInt == 0) && (!this.powerSoundPlaying)) {
+      this.world.sounds.playSound(SoundEngine.tankPower)
+      this.powerSoundPlaying = true
+    }
+    
+    if(this.powerChangeInt > 50 && this.powerSoundPlaying) {
+      this.world.sounds.stopSound(SoundEngine.tankPower)
+      this.powerSoundPlaying = false
+    }
     
     //make here AI tank animations for power and angle settings
     
