@@ -22,7 +22,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   //these properties are for tank animations only
   var vectorPosition= new Vector2(position.x, position.y)
   var reachedDestination: Boolean = true //check that this flag is true, before moving tank again
-  var isFalling: Boolean = false
+  private var isFalling: Boolean = false
+  private var barrelMoving = false
+  private var barrelMovingInt = 0
+  private var barrelSoundPlaying = false
   
   //moving related methods
   
@@ -97,10 +100,12 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def turnCannonLeft(amount: Int): Unit = {
     this.shootDirection = Tank.clamp8bit(this.shootDirection - amount)
+    this.barrelMoving = true
   }
   
   def turnCannonRight(amount: Int): Unit = {
     this.shootDirection = Tank.clamp8bit(this.shootDirection + amount)
+    this.barrelMoving = true
   }
   
   def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
@@ -192,9 +197,31 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     
     //if tank is destroyded play explosion animation and trigger end game
     if(this.isDestroyed) {
+      this.world.sounds.playSound(SoundEngine.bigExplosion)
       this.world.addExpolsionPosition(this.getPosition)
       this.world.endGame = true
     }
+    
+    
+    //make here object to play move barrel sounds
+    this.barrelMovingInt = this.barrelMovingInt + 1
+    
+    if(this.barrelMoving) {
+      this.barrelMovingInt = 0
+      this.barrelMoving = false
+    }
+    
+    if((this.barrelMovingInt == 0) && (!this.barrelSoundPlaying)) {
+      this.world.sounds.playSound(SoundEngine.tankBarrel)
+      this.barrelSoundPlaying = true
+    }
+    
+    
+    if(this.barrelMovingInt > 50 && this.barrelSoundPlaying){
+      this.world.sounds.stopSound(SoundEngine.tankBarrel)
+      this.barrelSoundPlaying = false
+    }
+    
     
   }
   
