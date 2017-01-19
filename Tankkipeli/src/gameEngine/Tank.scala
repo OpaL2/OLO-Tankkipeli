@@ -281,6 +281,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       this.barrelSoundPlaying = false
     }
     
+    //make here object to play change power sounds
+    
+    //make here AI tank animations for power and angle settings
+    
     
   }
   
