@@ -45,15 +45,15 @@ class AI (val difficulty : Int, world: World){
   def shoot(ownp: Pos, enemyp: Pos): Unit = {
     
     val enemyPosition = enemyp
-    
+    // distance between tanks
     val startAngle = (if (ownp.x < enemyp.x) 191 else 64)
-    
+    // ammo that has been selected
     var angle = startAngle
-    
+    // shooting power
     var power = 10
-    
+    // test hit location
     var hitPos = this.world.currentTank.testshoot(angle, power)
-    
+    //distance between testhit location and target  
     while(true) {
       if(hitPos == enemyPosition || power > 255){
         //in this case we shoot and return from this function
@@ -69,6 +69,12 @@ class AI (val difficulty : Int, world: World){
         //error is negative
         negativeError
       }
+    var hitdistance = math.sqrt((hitlocation.x + enemyp.x)^2 + (hitlocation.y + enemyp.y)^2 )
+    //increment for adding and decreasing power
+    var powerincrement = math.sqrt(hitdistance).toInt
+    // increment for angles
+    var angleincrement = 128/difficulty
+    
       
       hitPos = this.world.currentTank.testshoot(angle, power)
     }
