@@ -126,7 +126,7 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   private def calcSpeed(): Vector2 = new Vector2(this.calcXSpeed(this.time), this.calcYSpeed(this.time))
   
-  private def testCollision(): Boolean = !this.world.gamefield.isEmpty(this.getPosition) && this.leavedTankPos
+  private def testCollision(): Boolean = !this.world.gamefield.isEmpty(this.getPosition) && this.leavedTankPos && (this.getPosition.y < this.world.gamefield.height)
   
 
   def update(dt: Double): Unit= {
