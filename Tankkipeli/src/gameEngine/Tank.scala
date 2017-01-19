@@ -30,15 +30,18 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   def moveLeft(): Boolean = {
     if(this.canMove){
     if (this.world.gamefield.canMove(this.position.left.down)){
-      this.consumeFuel(2) 
+      this.consumeFuel(2)
+      this.world.sounds.loopSound(SoundEngine.tankDrive)
       this.updateWorld(this.position.left.down)
     }
     else if (this.world.gamefield.canMove(this.position.left)){
-      this.consumeFuel(3) 
+      this.consumeFuel(3)
+      this.world.sounds.loopSound(SoundEngine.tankDrive)
       this.updateWorld(this.position.left)
     }
     else if (this.world.gamefield.canMove(this.position.left.up)){
       this.consumeFuel(5)
+      this.world.sounds.loopSound(SoundEngine.tankDrive)
       this.updateWorld(this.position.left.up)
     }
     else
@@ -53,14 +56,17 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     if (this.canMove){
     if (this.world.gamefield.canMove(this.position.right.down)){
       this.consumeFuel(2)
+      this.world.sounds.loopSound(SoundEngine.tankDrive)
       this.updateWorld(this.position.right.down)
     }
     else if (this.world.gamefield.canMove(this.position.right)){
        this.consumeFuel(3)
+       this.world.sounds.loopSound(SoundEngine.tankDrive)
        this.updateWorld(this.position.right)
     }
     else if (this.world.gamefield.canMove(this.position.right.up)){
       this.consumeFuel(5)
+      this.world.sounds.loopSound(SoundEngine.tankDrive)
       this.updateWorld(this.position.right.up)
     }
     else
@@ -84,13 +90,18 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   def getFuelLevel = this.fuel
   
+  
   private def canMove: Boolean = this.fuel > 0 && (!this.isDestroyed)
   
   //cannon related methods:
   
-  def turnCannonLeft(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection - amount)
+  def turnCannonLeft(amount: Int): Unit = {
+    this.shootDirection = Tank.clamp8bit(this.shootDirection - amount)
+  }
   
-  def turnCannonRight(amount: Int): Unit = this.shootDirection = Tank.clamp8bit(this.shootDirection + amount)
+  def turnCannonRight(amount: Int): Unit = {
+    this.shootDirection = Tank.clamp8bit(this.shootDirection + amount)
+  }
   
   def increaseShootPower(amount: Int): Unit = this.shootPower = Tank.clamp8bit(this.shootPower + amount)
   
@@ -162,6 +173,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     if(-tmp > direction.x || tmp < direction.x || -tmp > direction.y || tmp < direction.y) {
       if(this.isFalling) this.vectorPosition = this.vectorPosition + new Vector2(0, -10) * dt
       else this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
+
       
       
     }
@@ -170,7 +182,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     //if close enough, make vector position constant
     else {
       this.vectorPosition = new Vector2(this.position.x, this.position.y)
-      if(this.isFalling) this.world.sounds.playSound(SoundEngine.groundHit)
+      
+      if(this.isFalling) {this.world.sounds.playSound(SoundEngine.groundHit)}
+      
+      if(!this.reachedDestination) this.world.sounds.stopSound(SoundEngine.tankDrive)
       this.reachedDestination = true
       this.isFalling = false
     }

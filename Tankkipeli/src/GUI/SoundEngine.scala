@@ -8,20 +8,23 @@ object SoundEngine {
   
   val explosion = Sound("explosion.wav")
   val bigExplosion = Sound("big_explosion.wav")
-  val bigHit = Sound("big_hit.wav")
   val cannonFire = Sound("cannon_fire.wav")
   val groundHit = Sound("ground_hit.wav")
   val lobbyMusic = Sound("lobby_music.wav")
   val music = Sound("music.wav")
+  val tankDrive = Sound("tank_Drive.wav")
+  val tankBarrel = Sound("tank_barrel.wav")
   
   def closeAllStreams() = {
     explosion.close()
     bigExplosion.close()
-    bigHit.close()
     cannonFire.close()
     groundHit.close()
     lobbyMusic.close()
     music.close()
+    tankDrive.close()
+    tankBarrel.close()
+    
   }
   
 }

@@ -290,12 +290,14 @@ class PaintWorld() extends Panel {
         world.currentTank.turnCannonLeft(1)
     }
     case KeyPressed(_, Key.W, _, _) => {
-      if(playerTank())
+      if(playerTank()) {
         world.currentTank.increaseShootPower(1)
+      }
     }
     case KeyPressed(_, Key.S, _, _) => {
-      if(playerTank())
+      if(playerTank()) {
         world.currentTank.decreaseShootPower(1)
+      }
     }
     
     case KeyPressed(_, Key.Space, _, _) => {
