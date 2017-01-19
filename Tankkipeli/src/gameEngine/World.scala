@@ -11,8 +11,8 @@ object World {
   val GRAVITY = 5.0
   val MULTIPLIER = 20
   val TANKHP = 40
-  val DMGDIVIDER = 3
-  val MAXDMGITER = 3
+  val DMGDIVIDER = 2
+  val MAXDMGITER = 5
   val TANKINITIALFUEL = 100
   val TANKSPEED = 0.5
   val TANKANIMATIONBOUN = 0.05
