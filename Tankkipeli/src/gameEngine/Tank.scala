@@ -147,8 +147,8 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
         bullet.update(1.0/100)
       }
       bullet.getPosition
-
     }
+  
   //these private classes are only meant to use by testShoot method
   private class testAmmunition(val dmg: Int, val massMultiplier: Double) extends Ammunition(this.world) {
     val description = "test ammo"
@@ -176,8 +176,11 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   //for AI-tank animations AIshoot.
   def AIshoot(power:Int, angle:Int){
+     //currently doing it's stuff, but not ready one
+    this.shootDirection = Tank.clamp8bit(angle)
+    this.shootPower = Tank.clamp8bit(power)
+    this.shoot()
      
-     ???
    }
   
   //magazine related methdos:
