@@ -14,6 +14,9 @@ import scala.collection.mutable.Buffer
 
 class PaintWorld() extends Panel {
   
+  //flag determining if game is running
+  var running = false
+  
   //creating game:
   var world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
@@ -203,7 +206,6 @@ class PaintWorld() extends Panel {
     
     if(world.isExpolded()) {
       val pos = world.getExplosionPosition
-      SoundEngine.explosion.play()
       this.explosions.append(ExplosionAnimation(pos, TankGame.imageSize*3))
     }
     
@@ -256,7 +258,13 @@ class PaintWorld() extends Panel {
     }
   }
   
-  timer.start
+  def startGame(): Unit = {
+    timer.start
+    world.sounds.loopSound(SoundEngine.music)
+    running = true
+  }
+  
+  startGame
   
   def playerTank(): Boolean = world.currentTank.id == "Player"
   
@@ -295,6 +303,15 @@ class PaintWorld() extends Panel {
         world.currentTank.shoot()
         world.nextTank
       }
+    }
+    
+    case KeyPressed(_, Key.M, _, _) => {
+      if(world.sounds.muted) {
+        world.sounds.unmute()
+        if(running) world.sounds.loopSound(SoundEngine.music)
+        else SoundEngine.lobbyMusic.loop()
+      }
+      else world.sounds.mute()
     }
   }
   

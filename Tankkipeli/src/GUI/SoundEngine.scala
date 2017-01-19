@@ -14,12 +14,20 @@ object SoundEngine {
   val lobbyMusic = Sound("lobby_music.wav")
   val music = Sound("music.wav")
   
-  
+  def closeAllStreams() = {
+    explosion.close()
+    bigExplosion.close()
+    bigHit.close()
+    cannonFire.close()
+    groundHit.close()
+    lobbyMusic.close()
+    music.close()
+  }
   
 }
 
 class SoundEngine {
-  private var muted = false
+  var muted = false
   
   def playSound(sound: Sound) = {
     if(!this.muted) sound.play()
@@ -45,7 +53,8 @@ class SoundEngine {
 }
 
 case class Sound(path: String) {
-  private val sound = AudioSystem.getAudioInputStream(new File("./sounds/" + path))
+  private val file = new File("./sounds/" + path)
+  private val sound = AudioSystem.getAudioInputStream(file)
   private val clip = AudioSystem.getClip()
   clip.open(sound)
   
@@ -60,6 +69,10 @@ case class Sound(path: String) {
   
   def stop() = {
     clip.stop()
+  }
+  
+  def close() = {
+     sound.close()
   }
   
 }
