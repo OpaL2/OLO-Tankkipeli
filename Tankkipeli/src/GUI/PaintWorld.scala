@@ -68,6 +68,7 @@ class PaintWorld() extends Panel {
     world.getTanks.foreach( x => {
       g.drawImage(Images.tank, Help.WorldXToUI(x.vectorPosition.x),
           Help.WorldYToUI(x.vectorPosition.y), null)
+      drawBarrel(x)
       }
     )
     
@@ -102,9 +103,6 @@ class PaintWorld() extends Panel {
       g.drawRect(x,y,width, height)
     }
     
-    drawBarrel(playerTank)
-    drawBarrel(world.getTanks.filter(_.id == "AI")(0))
-    
     drawPowerIndicator(playerTank)
     
     //draw bullets
@@ -115,8 +113,8 @@ class PaintWorld() extends Panel {
   
   
   //timer for requesting updates, this stuff is runned regulary
-  Timer(1000/60) {
-    world.update(1.0/60)
+  Timer(1000/100) {
+    world.update(1.0/100)
     this.repaint()
   }
   
