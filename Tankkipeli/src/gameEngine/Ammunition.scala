@@ -1,5 +1,6 @@
 package gameEngine
 
+import GUI.SoundEngine
 import scala.math
 import scala.collection.mutable.Buffer
 
@@ -12,12 +13,22 @@ case class BasicAmmunition(override val world: World) extends Ammunition(world) 
   val massMultiplier = 1.0
   val dmg = 50
   val description = "Basic round"
+  
+  override def explode(position: Pos) = {
+    this.world.sounds.playSound(SoundEngine.explosion)
+    super.explode(position)
+  }
 }
 
 case class HeavyAmmunition(override val world: World) extends Ammunition(world) {
   val massMultiplier = 0.7
   val dmg = 100
   val description = "Heavy missile"
+  
+  override def explode(position: Pos) = {
+    this.world.sounds.playSound(SoundEngine.bigExplosion)
+    super.explode(position)
+  }
 }
 
 sealed abstract class Ammunition(val world: World)  {
@@ -44,7 +55,6 @@ sealed abstract class Ammunition(val world: World)  {
     if(this.world.gamefield.isWall(position) && element.isDestroyed) {
       this.world.gamefield.update(new Empty(position), position)
     }*/
-    
     
     
     var tmpDmg = this.dmg

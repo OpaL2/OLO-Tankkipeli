@@ -1,6 +1,6 @@
 package gameEngine
 
-
+import GUI.SoundEngine
 import LinkedList.List
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Stack
@@ -27,6 +27,11 @@ class World (width: Int, height: Int) {
   private val explosionStack = Stack.empty[Pos]
   var bulletBuffer = Buffer.empty[Bullet]
   var endGame = false
+  var endTurn = false
+  
+  //creating sound engine
+  val sounds = new SoundEngine
+  
   
   //generating terrain
   this.setFloor(GenTerrain.generate(5, width, 2))
@@ -105,6 +110,7 @@ class World (width: Int, height: Int) {
   def update(dt: Double) = {
     this.bulletBuffer.foreach { x => x.update(dt) }
     this.tankList.foreach(_.update(dt))
+    if(this.bulletBuffer.isEmpty) this.endTurn = false
   }
   
 }

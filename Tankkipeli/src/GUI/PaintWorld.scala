@@ -14,6 +14,9 @@ import scala.collection.mutable.Buffer
 
 class PaintWorld() extends Panel {
   
+  //flag determining if game is running
+  var running = false
+  
   //creating game:
   var world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
@@ -33,6 +36,9 @@ class PaintWorld() extends Panel {
   
   val explosions = Buffer.empty[ExplosionAnimation]
   
+  //===================================================================================================================
+  //DRAW METHDO STARTS HERE
+  //===================================================================================================================
   override def paintComponent(g: Graphics2D) {
     
     val gamefield = world.gamefield
@@ -87,7 +93,7 @@ class PaintWorld() extends Panel {
             }
             //top cone
             if(!gamefield.isWall(x-1,y) && !gamefield.isWall(x+1,y)) {
-              img = Images.tileDown
+              img = Images.tilePeak
               
               //if floating around
               if(!gamefield.isWall(x,y-1)) {
@@ -226,8 +232,11 @@ class PaintWorld() extends Panel {
     }
     if(world.endGame) drawEnd()
     
-    //END OF DRAW METHOD
   }
+  
+  //===================================================================================================================
+  //DRAW PART END HERE
+  //===================================================================================================================
   
   
   //timer for requesting updates, this stuff is runned regulary
@@ -249,7 +258,13 @@ class PaintWorld() extends Panel {
     }
   }
   
-  timer.start
+  def startGame(): Unit = {
+    timer.start
+    world.sounds.loopSound(SoundEngine.music)
+    running = true
+  }
+  
+  startGame
   
   def playerTank(): Boolean = world.currentTank.id == "Player"
   
@@ -287,7 +302,17 @@ class PaintWorld() extends Panel {
       if(playerTank()){
         world.currentTank.shoot()
         world.nextTank
+        world.endTurn = true
       }
+    }
+    
+    case KeyPressed(_, Key.M, _, _) => {
+      if(world.sounds.muted) {
+        world.sounds.unmute()
+        if(running) world.sounds.loopSound(SoundEngine.music)
+        else SoundEngine.lobbyMusic.loop()
+      }
+      else world.sounds.mute()
     }
   }
   

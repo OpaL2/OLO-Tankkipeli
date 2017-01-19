@@ -1,6 +1,7 @@
 package gameEngine
 
 import scala.collection.mutable.Stack
+import GUI.SoundEngine
 
 object Tank{
   def clamp8bit(value: Int) = {
@@ -21,6 +22,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   //these properties are for tank animations only
   var vectorPosition= new Vector2(position.x, position.y)
   var reachedDestination: Boolean = true //check that this flag is true, before moving tank again
+  var isFalling: Boolean = false
   
   //moving related methods
   
@@ -99,8 +101,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   def getShootPower = this.shootPower
   
   def shoot(): Unit = {
-    if(!this.magazine.isEmpty)
-    this.magazine.pop().shoot(this.position, this.shootDirection, this.shootPower)
+    if(!this.magazine.isEmpty) {
+      this.magazine.pop().shoot(this.position, this.shootDirection, this.shootPower)
+      this.world.sounds.playSound(SoundEngine.cannonFire)
+    }
   }
   
   
@@ -139,6 +143,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
    //drops tank one position down if it does not have ground below it
    if(this.reachedDestination && this.world.gamefield.isEmpty(this.position.down)) {
       this.updateWorld(this.position.down)
+      this.isFalling = true
    }
     //triggered if tank is dropped out of the gamefield
     if(!this.world.gamefield.contains(this.position.down)) {
@@ -155,7 +160,9 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     //move if required
     val tmp = World.TANKANIMATIONBOUN
     if(-tmp > direction.x || tmp < direction.x || -tmp > direction.y || tmp < direction.y) {
-      this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
+      if(this.isFalling) this.vectorPosition = this.vectorPosition + new Vector2(0, -10) * dt
+      else this.vectorPosition = this.vectorPosition + (direction.unitVector() * World.TANKSPEED*dt)
+      
       
     }
 
@@ -163,7 +170,9 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     //if close enough, make vector position constant
     else {
       this.vectorPosition = new Vector2(this.position.x, this.position.y)
+      if(this.isFalling) this.world.sounds.playSound(SoundEngine.groundHit)
       this.reachedDestination = true
+      this.isFalling = false
     }
     
     //if tank is destroyded play explosion animation and trigger end game
