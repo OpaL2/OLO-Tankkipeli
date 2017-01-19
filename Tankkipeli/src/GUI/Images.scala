@@ -39,6 +39,9 @@ object Images {
   //ammunition images
   val cannonball = loadImage("cannonball.png")
   val missile = loadImage("missile.png")
+  
+  //mesh
+  val mesh = loadImage("blackmesh.png")
 
   
 }
