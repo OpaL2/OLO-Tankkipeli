@@ -42,7 +42,10 @@ class AI (val difficulty : Int, world: World){
     
     var currentAmmo = world.currentTank.getCurrentAmmunition
     
-    world.currentTank.testshoot(ownp, shootingAngle, power, currentAmmo)
+    var shootpower = ???
+    
+    var hitlocation = (world.currentTank.testshoot(ownp, shootingAngle, shootpower, currentAmmo))
+    
     
     var hitdistance =
       
