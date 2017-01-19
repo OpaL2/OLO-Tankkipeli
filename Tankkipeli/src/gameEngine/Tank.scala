@@ -17,8 +17,10 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private var shootPower = 128 //8-bit value
   private var fuel = World.TANKINITIALFUEL
   private val magazine = Stack.empty[Ammunition]
+  
+  //these properties are for tank animations only
   var vectorPosition= new Vector2(position.x, position.y)
-  var reachedDestination: Boolean = true
+  var reachedDestination: Boolean = true //check that this flag is true, before moving tank again
   
   //moving related methods
   
@@ -130,7 +132,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   override def toString = this.id
   
-  /**updates tank, aka checks that tank has ground below it*/
+  /**updates tank*/
   def update(dt:Double) = {
    //drops tank one position down if it does not have ground below it
    if(this.world.gamefield.isEmpty(this.position.down)) {

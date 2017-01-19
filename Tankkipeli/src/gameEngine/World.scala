@@ -14,7 +14,7 @@ object World {
   val DMGDIVIDER = 3
   val MAXDMGITER = 3
   val TANKINITIALFUEL = 100
-  val TANKSPEED = 0.1
+  val TANKSPEED = 0.2
   val TANKANIMATIONBOUN = 0.05
 }
 
@@ -95,8 +95,8 @@ class World (width: Int, height: Int) {
   
   /**call this mehtod to make ammunitions fly, use small dt value, */
   def update(dt: Double) = {
-    this.bulletBuffer.foreach { x => x.update(dt/100) }
-    this.tankList.foreach(_.update(dt/100))
+    this.bulletBuffer.foreach { x => x.update(dt) }
+    this.tankList.foreach(_.update(dt))
   }
   
 }

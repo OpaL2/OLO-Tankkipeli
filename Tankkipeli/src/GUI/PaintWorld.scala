@@ -109,12 +109,14 @@ class PaintWorld() extends Panel {
     
     //draw bullets
     
+    
+    
   }
   
   
   //timer for requesting updates, this stuff is runned regulary
-  Timer(100/20) {
-    world.update(100/20)
+  Timer(1000/60) {
+    world.update(1.0/60)
     this.repaint()
   }
   
