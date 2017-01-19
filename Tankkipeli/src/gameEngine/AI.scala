@@ -4,8 +4,8 @@ package gameEngine
 
 import scala.math
 
-// AI is the class for all AI operations it takes difficulty as a parametre in.
-class AI (val difficulty : Int){
+// AI is the class for all AI operations it takes difficulty and World as input
+class AI (val difficulty : Int, world: World){
   
   //just easier not beautiful
   val r :String = "right"
@@ -13,25 +13,23 @@ class AI (val difficulty : Int){
  
   
   // move takes in positions and spits out right,left or null (direction of AI movement)
-  def move(ownposition: Pos, enemyposition: Pos) = {
+  def move(ownp: Pos, enemyp: Pos) = {
       
     val remainingammo = world.currentTank.getMagazineSize
     val remainingfuel = world.currentTank.getFuelLevel
    
     if (remainingfuel > 0) {
       if (remainingammo >0 ){
-     if (ownposition.x > enemyposition.x && ownposition.y >1  ) l
-     else if (ownposition.x < enemyposition.x && ownposition.y >1 ) r
+     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true ) l
+     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
      else null
    } 
-   else if (ownposition.x > enemyposition.x && ownposition.y >1  ) r
-   else if (ownposition.x < enemyposition.x && ownposition.y >1 ) l
+   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
+   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true) l
    else null
     }
     else null
   }
-  
-  
   
   //shoot takes in positions and spits out parametres for shooting it 
   def shoot(ownposition: Pos, enemyposition: Pos) = {
