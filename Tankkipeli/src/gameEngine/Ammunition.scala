@@ -145,7 +145,7 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   def getPositionVector = this.position
   
-  def getSpeedVector = this.speed
+  def getSpeedVector = this.speed.unitVector()
   
 }
 

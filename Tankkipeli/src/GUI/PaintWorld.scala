@@ -76,6 +76,7 @@ class PaintWorld() extends Panel {
       g.drawImage(Images.tank, Help.WorldXToUI(x.vectorPosition.x),
           Help.WorldYToUI(x.vectorPosition.y)+ 3, null)
       drawBarrel(x)
+      drawNameLabel(x)
       }
     )
     
@@ -90,8 +91,17 @@ class PaintWorld() extends Panel {
       val x1 = math.round((x0 + math.cos(angle)* len)).toInt
       val y1 = math.round((y0 - math.sin(angle)* len)).toInt  
       
-      g.setColor(Color.BLACK)
+      g.setColor(Color.black)
       g.drawLine(x0, y0, x1, y1)
+    }
+    
+    def drawNameLabel(tank: Tank): Unit = {
+      val pos = tank.vectorPosition
+      val x = Help.WorldXToUI(pos.x)
+      val y = Help.WorldYToUI(pos.y) - 5
+      val label = tank.id
+      g.setColor(Color.gray)
+      g.drawString(label, x, y)
     }
     
     def drawPowerIndicator(tank: Tank): Unit = {
@@ -119,12 +129,18 @@ class PaintWorld() extends Panel {
         case x:BasicAmmunition => img = Images.cannonball
         case x:HeavyAmmunition => img = Images.missile
       }
-      val speed = bullet.getSpeedVector
+      val direction = bullet.getSpeedVector
       val pos = bullet.getPositionVector
       val x = Help.WorldXToUI(pos.x)
       val y = Help.WorldYToUI(pos.y)
+      var rotation = math.Pi/2 - math.asin(direction.y)
+      if(direction.x < 0)
+        rotation = -rotation
+
       
+      g.rotate(rotation, x + img.getWidth/2, y + img.getHeight/2)
       g.drawImage(img, x, y, null)
+      g.rotate(0.0, img.getWidth/2, img.getHeight/2)
       
     }
     
@@ -152,7 +168,6 @@ class PaintWorld() extends Panel {
     }
     
     drawExplosions
-    
   }
   
   
@@ -164,10 +179,15 @@ class PaintWorld() extends Panel {
     if(world.endGame) stop()
   }
   
-  var StopCounter = 30 //after game has ended animate 10 frames
+  var StopCounter = 10 //after game has ended animate 10 frames
+  
   def stop(): Unit = {
-    if(StopCounter > 0) StopCounter -= 1
-    else timer.stop()
+    if(StopCounter > 0) {
+      StopCounter = StopCounter - 1
+    }
+    else{
+      timer.stop()
+    }
   }
   
   timer.start

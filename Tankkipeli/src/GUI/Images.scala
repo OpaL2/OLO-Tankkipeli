@@ -21,8 +21,7 @@ object Images {
     
     scaledImage
   }
-  
-    
+
   //terraing images
   val tileLeftRight = loadImage("ramp_left_right.png")
   val tileRightLeft = loadImage("ramp_right_left.png")
@@ -40,11 +39,6 @@ object Images {
   //ammunition images
   val cannonball = loadImage("cannonball.png")
   val missile = loadImage("missile.png")
+
   
-  //explosion images
-  val expl1 = loadImage("explosion_1.png")
-  val expl2 = loadImage("explosion_2.png")
-  val expl3 = loadImage("explosion_3.png")
-  val expl4 = loadImage("explosion_4.png")
-  val expl5 = loadImage("smoke.png")
 }
