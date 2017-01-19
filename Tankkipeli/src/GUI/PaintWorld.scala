@@ -33,6 +33,9 @@ class PaintWorld() extends Panel {
   
   val explosions = Buffer.empty[ExplosionAnimation]
   
+  //===================================================================================================================
+  //DRAW METHDO STARTS HERE
+  //===================================================================================================================
   override def paintComponent(g: Graphics2D) {
     
     val gamefield = world.gamefield
@@ -87,7 +90,7 @@ class PaintWorld() extends Panel {
             }
             //top cone
             if(!gamefield.isWall(x-1,y) && !gamefield.isWall(x+1,y)) {
-              img = Images.tileDown
+              img = Images.tilePeak
               
               //if floating around
               if(!gamefield.isWall(x,y-1)) {
@@ -226,8 +229,11 @@ class PaintWorld() extends Panel {
     }
     if(world.endGame) drawEnd()
     
-    //END OF DRAW METHOD
   }
+  
+  //===================================================================================================================
+  //DRAW PART END HERE
+  //===================================================================================================================
   
   
   //timer for requesting updates, this stuff is runned regulary
