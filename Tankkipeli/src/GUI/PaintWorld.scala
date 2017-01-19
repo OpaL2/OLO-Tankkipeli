@@ -209,14 +209,14 @@ class PaintWorld() extends Panel {
                                 Images.loadImage("explosion_3.png", size),
                                 Images.loadImage("explosion_4.png", size),
                                 Images.loadImage("smoke.png", size))
-   private var n = 0
+   private var n = -1
    var active = true
    private var ret = images(0)
    
    def getNextImage(): BufferedImage= {
       n = n + 1
-      if(n <= images.size*2) {
-        ret = images((n - 1)/2)
+      if(n < images.size*2) {
+        ret = images(n/2)
         ret
       }
       else {

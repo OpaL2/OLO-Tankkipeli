@@ -8,8 +8,8 @@ import scala.collection.mutable.Stack
 /** object storing constants for game engine*/
 object World {
   val WALLHP = 20
-  val GRAVITY = 1.0
-  val MULTIPLIER = 10
+  val GRAVITY = 5.0
+  val MULTIPLIER = 20
   val TANKHP = 40
   val DMGDIVIDER = 3
   val MAXDMGITER = 3
