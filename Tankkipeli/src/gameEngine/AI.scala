@@ -2,7 +2,8 @@
 
 package gameEngine
 
-import scala.math
+import scala.util.Random
+
 
 // AI is the class for all AI operations it takes difficulty and World as input
 class AI (val difficulty : Int, world: World){
@@ -11,13 +12,15 @@ class AI (val difficulty : Int, world: World){
   val r :String = "right"
   val l :String = "left"
   
+  val rand = new Random()
+  
   var movesToTake = 0
   var startedTurn = false
   var shooted = false
   
   def initTurn() = {
     this.startedTurn = true
-    this.movesToTake = 3
+    this.movesToTake = this.rand.nextInt() % (this.difficulty+4)
     this.shooted = false
   }
  
@@ -76,7 +79,8 @@ class AI (val difficulty : Int, world: World){
     
     def variableShoot() = {
       //add variable amount of error, based on difficulty
-      this.world.currentTank.AIshoot(angle,power)
+      
+      this.world.currentTank.AIshoot(angle + randOffset,power + randOffset)
     }
     
     def error(): Int = enemyPosition.x - hitPos.x
@@ -95,6 +99,13 @@ class AI (val difficulty : Int, world: World){
         power += 1
         angle = startAngle
       }
+    }
+    
+    def randOffset: Int = {
+      val sing = this.rand.nextBoolean()
+      val amount = this.rand.nextInt() % (20 - this.difficulty*5)
+      if(sing) -amount
+      else amount
     }
   } 
    

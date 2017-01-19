@@ -21,7 +21,7 @@ class PaintWorld() extends Panel {
   var firstGame = true
   
   //creating game:
-  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 1)
+  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 3)
   
   world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
   world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))

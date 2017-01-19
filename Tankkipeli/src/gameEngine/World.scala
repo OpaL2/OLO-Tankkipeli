@@ -33,7 +33,7 @@ class World (width: Int, height: Int, difficulty: Int) {
   val sounds = new SoundEngine
   
   //creating AI
-  val ai = new AI(15, this)
+  val ai = new AI(difficulty, this)
   
   //generating terrain
   this.setFloor(GenTerrain.generate(8, width, 2))
