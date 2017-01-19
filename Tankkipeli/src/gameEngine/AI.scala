@@ -69,11 +69,6 @@ class AI (val difficulty : Int, world: World){
         //error is negative
         negativeError
       }
-    var hitdistance = math.sqrt((hitlocation.x + enemyp.x)^2 + (hitlocation.y + enemyp.y)^2 )
-    //increment for adding and decreasing power
-    var powerincrement = math.sqrt(hitdistance).toInt
-    // increment for angles
-    var angleincrement = 128/difficulty
     
       
       hitPos = this.world.currentTank.testshoot(angle, power)
