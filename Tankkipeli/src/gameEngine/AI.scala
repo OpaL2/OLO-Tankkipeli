@@ -3,6 +3,7 @@
 package gameEngine
 
 import scala.util.Random
+import scala.math
 
 
 // AI is the class for all AI operations it takes difficulty and World as input
@@ -20,8 +21,10 @@ class AI (val difficulty : Int, world: World){
   
   def initTurn() = {
     this.startedTurn = true
-    this.movesToTake = this.rand.nextInt() % (this.difficulty+4)
+    this.movesToTake = math.abs(this.rand.nextInt()) % (this.difficulty+4)
     this.shooted = false
+    println("turn started")
+    println(this.movesToTake)
   }
  
   
@@ -60,6 +63,10 @@ class AI (val difficulty : Int, world: World){
     while(true) {
       if(hitPos == enemyPosition || power > 255){
         //in this case we shoot and return from this function
+        if(power > 255) {
+          //make sure that tank is not going to hit himself
+          maxPowerShoot()
+        }
         variableShoot()
         this.shooted = true
         return
@@ -106,6 +113,17 @@ class AI (val difficulty : Int, world: World){
       val amount = this.rand.nextInt() % (20 - this.difficulty*5)
       if(sing) -amount
       else amount
+    }
+    
+    def maxPowerShoot(): Unit = {
+      while (true) {
+        if(math.abs(ownp.x - hitPos.x) < 4) {
+          if(ownp.x - hitPos.x > 0) positiveError
+          else negativeError
+          
+        }
+        else return
+      }
     }
   } 
    

@@ -129,11 +129,12 @@ class World (width: Int, height: Int, difficulty: Int) {
       }
      //if not moving, then shoot
      if(this.currentTank.reachedDestination && this.ai.movesToTake == 0 && !this.ai.shooted) {
-       println("started to shoot")
+         println("started to shoot")
         this.ai.shoot(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
       }
     }
-    
+    //taking care that ai can play future turns
+    if(!this.endGame && !this.endTurn && this.currentTank.id =="Player") this.ai.startedTurn = false
   }
   
 }
