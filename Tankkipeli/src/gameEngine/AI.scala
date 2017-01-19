@@ -20,22 +20,35 @@ class AI (val difficulty : Int, world: World){
    
     if (remainingfuel > 0) {
       if (remainingammo >0 ){
-     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true ) l
-     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
+     if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true && world.gamefield.doIFall(ownp.x-1, ownp.y) == false ) l
+     else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) r
      else null
    } 
-   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true ) r
-   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true) l
+   else if (ownp.x > enemyp.x && ownp.y >1 && world.currentTank.moveRight == true && world.gamefield.doIFall(ownp.x+1, ownp.y) == false ) r
+   else if (ownp.x < enemyp.x && ownp.y >1 && world.currentTank.moveLeft == true&& world.gamefield.doIFall(ownp.x-1, ownp.y) == false) l
    else null
     }
     else null
   }
   
   //shoot takes in positions and spits out parametres for shooting it 
-  def shoot(ownposition: Pos, enemyposition: Pos) = {
-    ???
+  def shoot(ownp: Pos, enemyp: Pos) = {
+    
+    val leftOrRight = (if (ownp.x >enemyp.x) r else l)
+    // angle = 0-255 90deg=127,5 45deg=63,75 135deg=191,25 
+    var shootingAngle = (if (leftOrRight == "right") 191 else 64  )
+    
+    var tankdistance =  math.sqrt((ownp.x + enemyp.x)^2 + (ownp.y + enemyp.y)^2 )
+    
+    var currentAmmo = world.currentTank.getCurrentAmmunition
+    
+    world.currentTank.testshoot(ownp, shootingAngle, power, currentAmmo)
+    
+    var hitdistance =
+      
+      
     } 
-  
+   
 
 }
 

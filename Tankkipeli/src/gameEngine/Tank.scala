@@ -122,7 +122,19 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       this.world.sounds.playSound(SoundEngine.cannonFire)
     }
   }
+  //testshoot is used by AI to check if it hits opponent or not. 
+  //If it hits returns true else false. 
+  //Testshoot does not consume any resources nor cause damage or have animations.
+  def testshoot(aiPosition :Pos, angle :Int, power:Int, ammotypefrommagazine :String):Boolean ={
+    ???
+    }
   
+  
+  //for AI-tank animations AIshoot.
+  def AIshoot(power:Int, angle:Int){
+     
+     ???
+   }
   
   //magazine related methdos:
   def addAmmunition(items: Ammunition*): Unit = {
