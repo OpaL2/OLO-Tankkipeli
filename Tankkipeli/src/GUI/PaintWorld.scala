@@ -203,6 +203,7 @@ class PaintWorld() extends Panel {
     
     if(world.isExpolded()) {
       val pos = world.getExplosionPosition
+      SoundEngine.explosion.play()
       this.explosions.append(ExplosionAnimation(pos, TankGame.imageSize*3))
     }
     
