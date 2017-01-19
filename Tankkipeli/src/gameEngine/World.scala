@@ -26,7 +26,6 @@ class World (width: Int, height: Int) {
   private val tankList = List.empty[Tank]
   private val explosionStack = Stack.empty[Pos]
   var bulletBuffer = Buffer.empty[Bullet]
-  
   var endGame = false
   
   //generating terrain
@@ -59,7 +58,7 @@ class World (width: Int, height: Int) {
   }
   
   /**creates tank with given id and start position, inserts it to world*/
-  def createTank(id: String, xPos: Int = GenTerrain.tankLocation(this.gamefield.width) ):Boolean = {
+  def createTank(id: String, xPos: Int):Boolean = {
     var y = 0
     while(y < this.gamefield.height && !this.gamefield.isEmpty(new Pos(xPos, y))) {
       y = y + 1

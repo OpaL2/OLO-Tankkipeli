@@ -49,11 +49,11 @@ object GenTerrain {
     }
   }
   
-  // the tank location picker (first most useless comme)
+  // the tank location picker (first most useless comment)
   
-  def tankLocation(length: Int) = abs(randy.nextInt() % length)
+  def tankLocation(start: Int, end: Int) = start + abs(randy.nextInt() % (end - start))
   
-  // fills the clips (most pointle)
+  // fills the clips (most pointless comment)
   
   def fillClips(tanks: Int, clips: Int, world: World): Vector[Vector[Ammunition]] = {
     
