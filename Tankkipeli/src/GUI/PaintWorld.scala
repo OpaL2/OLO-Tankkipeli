@@ -79,6 +79,11 @@ class PaintWorld() extends Panel {
             //top cone
             if(!gamefield.isWall(x-1,y) && !gamefield.isWall(x+1,y)) {
               img = Images.tileDown
+              
+              //if floating around
+              if(!gamefield.isWall(x,y-1)) {
+                img = Images.tileFull
+              }
             }
           }
           //if tile up contains wall
@@ -87,8 +92,14 @@ class PaintWorld() extends Panel {
             if(!gamefield.isWall(x-1,y)) {
               img = Images.tileLeft
             }
-            if(!gamefield.isWall(x+1,y)) {
+            //right straight wall
+            else if(!gamefield.isWall(x+1,y)) {
               img = Images.tileRight
+            }
+            
+            //both straight walls
+            if(!gamefield.isWall(x-1, y) && !gamefield.isWall(x+1, y)) {
+              img = Images.tileDown
             }
           }
           
