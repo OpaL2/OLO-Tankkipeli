@@ -82,7 +82,6 @@ class World (width: Int, height: Int, difficulty: Int) {
   
   def addAmmosToTanks(rounds: Int): Unit = {
     val ammo = GenTerrain.fillClips(this.tankList.toVector().size, rounds , this)
-    println(ammo)
     for(i <- 0 until ammo.size) {
       this.tankList.toVector()(i).addAmmunition(ammo(i))
     }
@@ -109,7 +108,7 @@ class World (width: Int, height: Int, difficulty: Int) {
   
   def getExplosionPosition: Pos = this.explosionStack.pop()
   
-  /**call this mehtod to make ammunitions fly, use small dt value, */
+  /**call this mehtod to make stuff happen, use small dt value, */
   def update(dt: Double) = {
     this.bulletBuffer.foreach { x => x.update(dt) }
     this.tankList.foreach(_.update(dt))

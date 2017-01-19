@@ -35,6 +35,8 @@ class PaintWorld() extends Panel {
     world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
   
     world.addAmmosToTanks(10)
+    
+    explosions.clear()
   }
   
   val explosions = Buffer.empty[ExplosionAnimation]

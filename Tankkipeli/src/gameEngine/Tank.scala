@@ -29,10 +29,19 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   private var barrelMovingInt = 0
   private var barrelSoundPlaying = false
   
+  private var AIBarrel = false
+  private var AIBarrelValue = 0
+  
   //power set sound and animation
   private var powerChange = false
   private var powerChangeInt = 0
   private var powerSoundPlaying = false
+  
+  private var AIPower = false
+  private var AIPowerValue = 0
+  
+  private var AICannonLoaded = false
+  private var AICannonDelay = 0
   
   //moving related methods
   
@@ -191,9 +200,11 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   def AIshoot(angle:Int, power:Int){
      //currently doing it's stuff, but not ready one
     //method should be returned immidaetly
-    this.shootDirection = Tank.clamp8bit(angle)
-    this.shootPower = Tank.clamp8bit(power)
-    this.shoot()
+    this.AIBarrel = true
+    this.AICannonLoaded = true
+    this.AIPower = true
+    this.AIBarrelValue = Tank.clamp8bit(angle)
+    this.AIPowerValue = Tank.clamp8bit(power)
      
    }
   
@@ -315,6 +326,33 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     
     //make here AI tank animations for power and angle settings
     
+    if(this.AIBarrel) {
+      if(this.shootDirection == this.AIBarrelValue) this.AIBarrel = false
+      else {
+        if(this.shootDirection < this.AIBarrelValue) this.turnCannonRight(1)
+        else this.turnCannonLeft(1)
+      }
+    }
+    
+    if(this.AIPower) {
+      if(this.shootPower == this.AIPowerValue) this.AIPower = false
+      else {
+        if(this.shootPower < this.AIPowerValue) this.increaseShootPower(1)
+        else this.decreaseShootPower(1)
+      }
+    }
+    
+    
+    
+    if(!this.AIPower && !this.AIBarrel && this.AICannonLoaded) {
+      this.AICannonDelay = 50
+      this.AICannonLoaded = false
+    }
+    
+    this.AICannonDelay -= 1
+    if(this.AICannonDelay < -10) this.AICannonDelay = -5
+    
+    if(this.AICannonDelay == 0) this.shoot()
     
   }
   
