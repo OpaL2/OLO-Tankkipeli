@@ -20,8 +20,12 @@ class PaintWorld() extends Panel {
   //flag determining, if this is a first start
   var firstGame = true
   
+  //diffculty dialog flags
+  var displayDifficulty = false
+  var difficulty = 1
+  
   //creating game:
-  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 3)
+  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight, this.difficulty)
   
   world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
   world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
@@ -29,7 +33,7 @@ class PaintWorld() extends Panel {
   world.addAmmosToTanks(10)
   
   def newGame(): Unit = {
-    world = new World(TankGame.WorldWidth, TankGame.WorldHeight, 1)
+    world = new World(TankGame.WorldWidth, TankGame.WorldHeight, this.difficulty)
   
     world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
     world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
@@ -237,13 +241,52 @@ class PaintWorld() extends Panel {
     }
     if(world.endGame) drawEnd()
     
+    def scaleFont(amount: Double) = {
+      val currentFont = g.getFont
+      val newFont = currentFont.deriveFont(currentFont.getSize * amount.toFloat)
+      g.setFont(newFont)
+    }
+    
     def drawStart(): Unit = {
       g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
-      g.drawString("Aloita peli painamalla Enter", 250, 250)
+      g.setColor(Color.white)
+      g.fillRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+      scaleFont(5)
+      g.setColor(Color.black)
+      g.drawString("Tank game", 50, 100)
+      scaleFont(1.0/5)
+      g.drawString("Start game by pressing enter", 50, 150)
+      
+      //draw control section
+      val x = Help.WorldXToUI(TankGame.WorldWidth) -350
+      g.drawString("Controls:",x,100)
+      
+      def drawControlElement(name: String, action: String, x: Int, y: Int) = {
+        g.drawString(name,x,y)
+        g.drawString("=",x +100, y)
+        g.drawString(action, x + 150, y)
+      }
+      drawControlElement("Left arrow", "move left", x, 120)
+      drawControlElement("Right arrow", "move right", x, 140)
+      drawControlElement("Up Arrow", "turn cannon right", x, 160) 
+      drawControlElement("Down Arrow", "turn cannon left", x, 180)
+      drawControlElement("W","increase cannon power", x, 200)
+      drawControlElement("S","decrease cannon power", x, 220)
+      drawControlElement("Space","shoot",x,240)
+      drawControlElement("M","mute sounds",x,260)
+      drawControlElement("Enter","Start new game/select",x, 280)
+
       world.sounds.loopSound(SoundEngine.lobbyMusic)
     }
     
     if(firstGame) drawStart()
+    
+    def drawSelectDifficulty(): Unit = {
+      
+      
+      
+    }
+      
     
     
   }
@@ -284,7 +327,7 @@ class PaintWorld() extends Panel {
     firstGame = false
   }
   
-  def playerTank(): Boolean = world.currentTank.id == "Player"
+  def playerTank(): Boolean = world.currentTank.id == "Player" && running
   
   //key listener
   listenTo(keys)

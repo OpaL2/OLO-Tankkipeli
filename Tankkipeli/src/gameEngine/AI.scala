@@ -111,7 +111,7 @@ class AI (val difficulty : Int, world: World){
     
     def randOffset: Int = {
       val sing = this.rand.nextBoolean()
-      val amount = this.rand.nextInt() % (20 - this.difficulty*5)
+      val amount = this.rand.nextInt() % (40 - this.difficulty*10)
       if(sing) -amount
       else amount
     }
