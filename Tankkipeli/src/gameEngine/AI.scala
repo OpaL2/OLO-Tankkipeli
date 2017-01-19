@@ -52,7 +52,7 @@ class AI (val difficulty : Int, world: World){
     
     val enemyPosition = enemyp
     // distance between tanks
-    val startAngle = (if (ownp.x < enemyp.x) 191 else 64)
+    val startAngle = 128
     // ammo that has been selected
     var angle = startAngle
     // shooting power
@@ -64,7 +64,7 @@ class AI (val difficulty : Int, world: World){
       if(hitPos == enemyPosition || power > 255){
         //in this case we shoot and return from this function
         if(power > 255) {
-          //make sure that tank is not going to hit himself
+          //trying to make sure that tank does not shoot itself
           maxPowerShoot()
         }
         variableShoot()
