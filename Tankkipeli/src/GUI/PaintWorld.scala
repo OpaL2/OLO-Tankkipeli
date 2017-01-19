@@ -74,7 +74,7 @@ class PaintWorld() extends Panel {
     //draws tanks
     world.getTanks.foreach( x => {
       g.drawImage(Images.tank, Help.WorldXToUI(x.vectorPosition.x),
-          Help.WorldYToUI(x.vectorPosition.y), null)
+          Help.WorldYToUI(x.vectorPosition.y)+ 3, null)
       drawBarrel(x)
       }
     )
@@ -86,7 +86,7 @@ class PaintWorld() extends Panel {
       val pos = tank.vectorPosition
       val angle =math.Pi*(255 - tank.getCannonAngle)/255 //angle in deg
       val x0 = Help.WorldXToUI(pos.x) + offset
-      val y0 = Help.WorldYToUI(pos.y) + offset
+      val y0 = Help.WorldYToUI(pos.y) + offset +3
       val x1 = math.round((x0 + math.cos(angle)* len)).toInt
       val y1 = math.round((y0 - math.sin(angle)* len)).toInt  
       
@@ -114,11 +114,17 @@ class PaintWorld() extends Panel {
     
     //draw bullets
     def drawBullet(bullet: Bullet): Unit = {
+      var img = Images.cannonball
+      bullet.ammunition match {
+        case x:BasicAmmunition => img = Images.cannonball
+        case x:HeavyAmmunition => img = Images.missile
+      }
+      val speed = bullet.getSpeedVector
       val pos = bullet.getPositionVector
       val x = Help.WorldXToUI(pos.x)
       val y = Help.WorldYToUI(pos.y)
       
-      g.drawImage(Images.cannonball, x, y, null)
+      g.drawImage(img, x, y, null)
       
     }
     
@@ -135,11 +141,17 @@ class PaintWorld() extends Panel {
     }
     
     //draw explosions
-    this.explosions.foreach{ x => {
-      if(x.active) g.drawImage( x.getNextImage(), Help.WorldXToUI(x.pos.x) - x.size/3, Help.WorldYToUI(x.pos.y) - x.size/3, null)
-      else this.explosions.remove(this.explosions.indexOf(x))
+    def drawExplosions(): Unit = {
+      this.explosions.foreach{ x => {
+        if(x.active) g.drawImage( x.getNextImage(), Help.WorldXToUI(x.pos.x) - x.size/3, Help.WorldYToUI(x.pos.y) - x.size/3, null)
+        }
+      }
+      val removeBuf = Buffer.empty[Int]
+      this.explosions.foreach { x => if(!x.active) removeBuf.append(this.explosions.indexOf(x)) }
+      removeBuf.foreach { this.explosions.remove(_)}
     }
-    }
+    
+    drawExplosions
     
   }
   

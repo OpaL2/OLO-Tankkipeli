@@ -8,19 +8,19 @@ object Ammunition{
   val MULTIPLIER = World.MULTIPLIER
 }
 
-class BasicAmmunition(world: World) extends Ammunition(world) {
+case class BasicAmmunition(override val world: World) extends Ammunition(world) {
   val massMultiplier = 1.0
   val dmg = 50
   val description = "Basic round"
 }
 
-class HeavyAmmunition(world: World) extends Ammunition(world) {
-  val massMultiplier = 0.5
-  val dmg = 70
+case class HeavyAmmunition(override val world: World) extends Ammunition(world) {
+  val massMultiplier = 0.7
+  val dmg = 100
   val description = "Heavy missile"
 }
 
-abstract class Ammunition(val world: World)  {
+sealed abstract class Ammunition(val world: World)  {
   
   val massMultiplier: Double
   val dmg: Int
@@ -141,7 +141,7 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   def getStartPos = new Pos(math.floor(this.startPosition.x).toInt, math.floor(this.startPosition.y).toInt)
   
-  def getPosition: Pos = new Pos(math.floor(this.position.x).toInt, math.floor(this.position.y).toInt)
+  def getPosition: Pos = new Pos(math.round(this.position.x).toInt, math.round(this.position.y).toInt)
   
   def getPositionVector = this.position
   
