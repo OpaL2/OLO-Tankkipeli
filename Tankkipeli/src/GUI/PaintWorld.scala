@@ -15,12 +15,21 @@ import scala.collection.mutable.Buffer
 class PaintWorld() extends Panel {
   
   //creating game:
-  val world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
+  var world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
   world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
   world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
   
   world.addAmmosToTanks(10)
+  
+  def newGame(): Unit = {
+    world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
+  
+    world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
+    world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
+  
+    world.addAmmosToTanks(10)
+  }
   
   val explosions = Buffer.empty[ExplosionAnimation]
   
@@ -206,6 +215,18 @@ class PaintWorld() extends Panel {
     }
     
     drawExplosions
+    
+    //draw mesh if game over
+    def drawEnd(): Unit = {
+      for (x <- 0 until gamefield.width) {
+        for(y <- 0 until gamefield.height) {
+          g.drawImage(Images.mesh, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
+        }
+      }
+    }
+    if(world.endGame) drawEnd()
+    
+    //END OF DRAW METHOD
   }
   
   
