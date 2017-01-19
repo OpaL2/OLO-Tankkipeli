@@ -19,8 +19,8 @@ class PaintWorld() extends Panel {
   //creating game:
   val world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
-  world.createTank("Player")
-  world.createTank("AI")
+  world.createTank("Player", GenTerrain.tankLocation(0, TankGame.WorldWidth/2 -1))
+  world.createTank("AI", GenTerrain.tankLocation(TankGame.WorldWidth/2,  TankGame.WorldWidth - 1))
   
   world.addAmmosToTanks(10)
   
