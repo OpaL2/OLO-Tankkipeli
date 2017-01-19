@@ -137,7 +137,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   /**updates tank*/
   def update(dt:Double) = {
    //drops tank one position down if it does not have ground below it
-   if(this.world.gamefield.isEmpty(this.position.down)) {
+   if(this.reachedDestination && this.world.gamefield.isEmpty(this.position.down)) {
       this.updateWorld(this.position.down)
    }
     //triggered if tank is dropped out of the gamefield

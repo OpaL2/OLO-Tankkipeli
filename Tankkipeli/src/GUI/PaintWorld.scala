@@ -6,8 +6,6 @@ import java.awt.{Color, Graphics2D, Point, Graphics}
 import java.awt.image.BufferedImage
 import java.awt.RenderingHints
 import event._
-import gameEngine.Pos
-import gameEngine.World
 import scala.math
 
 import scala.collection.mutable.Buffer
@@ -65,7 +63,36 @@ class PaintWorld() extends Panel {
         if(gamefield.isWall(x, y)){
           //check around tile if there is not tile on one or more side, draw side tile.
           //also draw those half blocks, check them.
-          val img = Images.tileFull
+          var img = Images.tileFull
+          
+          //if tile up is empty
+          if(!gamefield.isWall(x, y + 1)) {
+            img = Images.tileUp
+            //left slope
+            if(!gamefield.isWall(x-1,y)) {
+              img = Images.tileLeftRight
+            }
+            //right slope
+            else if(!gamefield.isWall(x+1, y)) {
+              img = Images.tileRightLeft
+            }
+            //top cone
+            if(!gamefield.isWall(x-1,y) && !gamefield.isWall(x+1,y)) {
+              img = Images.tileDown
+            }
+          }
+          //if tile up contains wall
+          else {
+            //left straight wall
+            if(!gamefield.isWall(x-1,y)) {
+              img = Images.tileLeft
+            }
+            if(!gamefield.isWall(x+1,y)) {
+              img = Images.tileRight
+            }
+          }
+          
+          
           g.drawImage(img, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
         }
       }
