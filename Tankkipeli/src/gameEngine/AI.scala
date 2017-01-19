@@ -17,7 +17,7 @@ class AI (val difficulty : Int, world: World){
   
   def initTurn() = {
     this.startedTurn = true
-    this.movesToTake = 5
+    this.movesToTake = 3
     this.shooted = false
   }
  
@@ -42,42 +42,59 @@ class AI (val difficulty : Int, world: World){
   }
   
   //shoot takes in positions and spits out parametres for shooting it 
-  def shoot(ownp: Pos, enemyp: Pos) = {
+  def shoot(ownp: Pos, enemyp: Pos): Unit = {
     
-    val leftOrRight = (if (ownp.x >enemyp.x) r else l)
-    // angle = 0-255 90deg=127,5 45deg=63,75 135deg=191,25 
-    var shootingAngle = (if (leftOrRight == "right") 191 else 64  )
+    val enemyPosition = enemyp
     
-    var tankdistance =  math.sqrt((ownp.x + enemyp.x)^2 + (ownp.y + enemyp.y)^2 )
+    val startAngle = (if (ownp.x < enemyp.x) 191 else 64)
     
-    var shootpower = ((255/world.gamefield.width)*tankdistance).toInt
+    var angle = startAngle
     
-    var hitlocation = (world.currentTank.testshoot(shootingAngle, shootpower))
+    var power = 10
     
-    var hitdistance = math.sqrt((hitlocation.x + enemyp.x)^2 + (hitlocation.y + enemyp.y)^2 )
+    var hitPos = this.world.currentTank.testshoot(angle, power)
     
-    var powerincrement = math.sqrt(hitdistance).toInt
-    
-    var angleincrement = 128/difficulty
-    
-    def calcShoot(): Unit = {
-      while(true) {
-        if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootpower += powerincrement
-        else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootpower -= powerincrement
-        else return
+    while(true) {
+      if(hitPos == enemyPosition || power > 255){
+        //in this case we shoot and return from this function
+        variableShoot()
+        this.shooted = true
+        return
+      }
+      else if( error > 0) {
+        //error is positive
+        positiveError
+      }
+      else {
+        //error is negative
+        negativeError
+      }
       
-        if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootingAngle -= angleincrement
-        else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootingAngle += angleincrement
-        else return
+      hitPos = this.world.currentTank.testshoot(angle, power)
+    }
+    
+    def variableShoot() = {
+      //add variable amount of error, based on difficulty
+      this.world.currentTank.AIshoot(angle,power)
+    }
+    
+    def error(): Int = enemyPosition.x - hitPos.x
+    
+    def negativeError() = {
+      if(angle >= 0) angle -= 1
+      else {
+        power +=1
+        angle = startAngle
       }
     }
     
-    calcShoot()
-    
-    this.shooted = true
-    world.currentTank.AIshoot(shootingAngle, shootpower)
-    
-    
+    def positiveError() = {
+      if(angle <= 255) angle += 1
+      else {
+        power += 1
+        angle = startAngle
+      }
+    }
   } 
    
 

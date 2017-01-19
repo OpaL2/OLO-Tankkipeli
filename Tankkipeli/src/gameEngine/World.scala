@@ -33,7 +33,7 @@ class World (width: Int, height: Int, difficulty: Int) {
   val sounds = new SoundEngine
   
   //creating AI
-  val ai = new AI(difficulty, this)
+  val ai = new AI(15, this)
   
   //generating terrain
   this.setFloor(GenTerrain.generate(8, width, 2))
@@ -115,7 +115,7 @@ class World (width: Int, height: Int, difficulty: Int) {
     if(this.bulletBuffer.isEmpty) this.endTurn = false
     
     //make AI to play his turn here
-    if(!this.endTurn && this.currentTank.id == "AI") {
+    if(!this.endGame && !this.endTurn && this.currentTank.id == "AI") {
       //ai playing turn
       //if not started turn, init it
       if(!this.ai.startedTurn) this.ai.initTurn()
@@ -127,10 +127,11 @@ class World (width: Int, height: Int, difficulty: Int) {
         if(ret != null) this.ai.movesToTake -= 1
         else this.ai.movesToTake = 0
       }
-      //if not moving, then shoot
-    /*  else if(!this.ai.shooted) { 
+     //if not moving, then shoot
+     if(this.currentTank.reachedDestination && this.ai.movesToTake == 0 && !this.ai.shooted) {
+       println("started to shoot")
         this.ai.shoot(this.currentTank.getPosition, this.tankList.toVector().filter(_.id == "Player")(0).getPosition)
-      }*/
+      }
     }
     
   }

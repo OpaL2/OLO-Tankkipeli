@@ -156,7 +156,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
           dmg = x.dmg
         }
       }
-      val bullet = (new testAmmunition(dmg, mass)).testShoot(this.position, ang, pow)
+      val bullet = (new testAmmunition(dmg, mass)).testShoot(this.getPosition, ang, pow)
       
       while(!bullet.isHit) {
         bullet.update(1.0/100)
@@ -173,8 +173,6 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     }
     
     override def explode(position: Pos) = Unit
-    
-    override def outOfGame() = Unit
   }
   
   private class testBullet(startPos: Pos, angle: Int, power: Int, massMultiplier: Double, world: World, 
@@ -190,8 +188,9 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   
   //for AI-tank animations AIshoot.
-  def AIshoot(power:Int, angle:Int){
+  def AIshoot(angle:Int, power:Int){
      //currently doing it's stuff, but not ready one
+    //method should be returned immidaetly
     this.shootDirection = Tank.clamp8bit(angle)
     this.shootPower = Tank.clamp8bit(power)
     this.shoot()
