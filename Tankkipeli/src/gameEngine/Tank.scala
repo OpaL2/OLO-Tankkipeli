@@ -11,7 +11,7 @@ object Tank{
 }
 
 /** class represents tank in a game, ALERT: Before executing any actions, check that tank is working, with isDestoryed method, none of the command methods will check this*/
-class Tank(val id: String,private var position: Pos, private val world: World) extends DestroyableObject(World.TANKHP) with GameObject {
+class Tank(val id: String,private var position: Pos, private val world: World) extends DestroyableObject(World.TANKHP) {
   
   private var shootDirection = 128 //8-bit value, 0 means straight left and 255 straight right
   private var shootPower = 128 //8-bit value
@@ -105,9 +105,11 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   
   //magazine related methdos:
-  def addAmmunition(items: Ammunition*) = {
+  def addAmmunition(items: Ammunition*): Unit = {
     items.foreach { this.magazine.push(_) }
   }
+  
+  def addAmmunition(items: Vector[Ammunition]): Unit =items.foreach { this.addAmmunition(_) }
   
   def getMagazine = this.magazine.toVector
   
@@ -162,6 +164,12 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     else {
       this.vectorPosition = new Vector2(this.position.x, this.position.y)
       this.reachedDestination = true
+    }
+    
+    //if tank is destroyded play explosion animation and trigger end game
+    if(this.isDestroyed) {
+      this.world.addExpolsionPosition(this.getPosition)
+      this.world.endGame = true
     }
     
   }

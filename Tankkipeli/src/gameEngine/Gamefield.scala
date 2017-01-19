@@ -32,6 +32,7 @@ class Gamefield(val width: Int, val height: Int) {
   private def nearTank(location: Pos): Boolean = this.isTank(location) || this.isTank(location.up) || this.isTank(location.down)
   
   def canMove(location: Pos): Boolean = this.contains(location)&&this.isEmpty(location)&&(!this.nearTank(location))
+ 
   
   def contains(x: Int, y: Int): Boolean = 
     x >= 0 && x < this.width && 
@@ -70,14 +71,19 @@ trait GameObject {
   def causeDmg(dmg: Int): Unit
   
   def isDestroyed: Boolean
+  
+  def getHP: Int
 }
 
-abstract class DestroyableObject(private val Hp: Int) {
+abstract class DestroyableObject(private var Hp: Int) extends GameObject {
   def getPosition: Pos
   
-  def causeDmg(dmg: Int): Unit = this.Hp - dmg
+  def causeDmg(dmg: Int): Unit = {
+    this.Hp = this.Hp - dmg
+    if(this.Hp <0) this.Hp = 0
+  }
   
-  def getHp = this.Hp
+  def getHP = this.Hp
   
   def isDestroyed: Boolean = this.Hp <= 0
 }
@@ -93,9 +99,11 @@ class Empty(private var pos: Pos) extends GameObject {
   def isDestroyed = false
   
   def causeDmg(dmg: Int): Unit = Unit  
+  
+  def getHP = -100
 }
 
-class Wall(private var pos: Pos) extends DestroyableObject(World.WALLHP) with GameObject {
+class Wall(private var pos: Pos) extends DestroyableObject(World.WALLHP) {
   
   def getPosition = this.pos
   

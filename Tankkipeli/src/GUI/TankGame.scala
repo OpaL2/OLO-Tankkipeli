@@ -6,6 +6,7 @@ import scala.swing.event._
 import java.awt.{Color, Graphics2D}
 import java.awt.event._
 import event._
+import javax.swing.Timer
 
 object TankGame extends SimpleSwingApplication {
   
@@ -40,12 +41,12 @@ object TankGame extends SimpleSwingApplication {
 
 /** timer object for triggering redraw and update*/
 object Timer {
-  def apply(interval: Int, repeats: Boolean = true)(op: => Unit) {
+  def apply(interval: Int, repeats: Boolean = true)(op: => Unit): Timer = {
     val timeOut = new javax.swing.AbstractAction() {
       def actionPerformed(e : java.awt.event.ActionEvent) = op
     }
-    val t = new javax.swing.Timer(interval, timeOut)
+    val t = new Timer(interval, timeOut)
     t.setRepeats(repeats)
-    t.start()
+    t
   }
 }

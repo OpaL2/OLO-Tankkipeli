@@ -9,7 +9,7 @@ import scala.collection.mutable.Stack
 object World {
   val WALLHP = 20
   val GRAVITY = 1.0
-  val MULTIPLIER = 1.0
+  val MULTIPLIER = 10
   val TANKHP = 40
   val DMGDIVIDER = 3
   val MAXDMGITER = 3
@@ -25,10 +25,12 @@ class World (width: Int, height: Int) {
   val gamefield = new gameEngine.Gamefield(width, height)
   private val tankList = List.empty[Tank]
   private val explosionStack = Stack.empty[Pos]
-  private var bulletBuffer = Buffer.empty[Bullet]
+  var bulletBuffer = Buffer.empty[Bullet]
+  
+  var endGame = false
   
   //generating terrain
-  this.setFloor(GenTerrain.generate(5, this.width, 2))
+  this.setFloor(GenTerrain.generate(5, width, 2))
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
@@ -57,7 +59,7 @@ class World (width: Int, height: Int) {
   }
   
   /**creates tank with given id and start position, inserts it to world*/
-  def createTank(id: String, xPos: Int):Boolean = {
+  def createTank(id: String, xPos: Int = GenTerrain.tankLocation(this.gamefield.width) ):Boolean = {
     var y = 0
     while(y < this.gamefield.height && !this.gamefield.isEmpty(new Pos(xPos, y))) {
       y = y + 1
@@ -70,6 +72,13 @@ class World (width: Int, height: Int) {
       true
     }
     else false
+  }
+  
+  def addAmmosToTanks(rounds: Int): Unit = {
+    val ammo = GenTerrain.fillClips(this.tankList.toVector().size, rounds , this)
+    for(i <- 0 until ammo.size) {
+      this.tankList.toVector()(i).addAmmunition(ammo(i))
+    }
   }
   
   /**get current tank in turn*/

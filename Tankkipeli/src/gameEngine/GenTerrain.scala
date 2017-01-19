@@ -55,7 +55,7 @@ object GenTerrain {
   
   // fills the clips (most pointle)
   
-  def fillClips(tanks: Int, clips: Int, world: World) = {
+  def fillClips(tanks: Int, clips: Int, world: World): Vector[Vector[Ammunition]] = {
     
     val basicAmount = abs(randy.nextInt % clips)
     val heavyAmount = clips - basicAmount
@@ -81,7 +81,7 @@ object GenTerrain {
       ammo.toVector
     }
     
-    Vector.tabulate(tanks)(ammoSuffler)
+    Vector.tabulate(tanks)(i => ammoSuffler)
     
   }
   

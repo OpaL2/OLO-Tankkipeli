@@ -15,7 +15,7 @@ class BasicAmmunition(world: World) extends Ammunition(world) {
 }
 
 class HeavyAmmunition(world: World) extends Ammunition(world) {
-  val massMultiplier = 1.2
+  val massMultiplier = 0.5
   val dmg = 70
   val description = "Heavy missile"
 }
@@ -33,8 +33,19 @@ abstract class Ammunition(val world: World)  {
   
   /** makes ammunition to explode at given position, greater damage causes bigger expolsion*/
   def explode(position: Pos) = {
+
     val gamefield = this.world.gamefield
     this.world.addExpolsionPosition(position)
+    /*val element = this.world.gamefield(position)
+
+    element.causeDmg(dmg)
+
+    
+    if(this.world.gamefield.isWall(position) && element.isDestroyed) {
+      this.world.gamefield.update(new Empty(position), position)
+    }*/
+    
+    
     
     var tmpDmg = this.dmg
     var iterRound = 0
@@ -83,13 +94,14 @@ abstract class Ammunition(val world: World)  {
 class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, val world: World, val ammunition: Ammunition) {
   
   val startPosition = new Vector2(startPos.x, startPos.y)
-  val startSpeed = this.calcSpeedVect((255-angle)/255.0*math.Pi, power/255.0)
+  val startSpeed = this.calcSpeedVect(math.Pi*(255-angle)/255.0, power/255.0)
   var speed = this.startSpeed
   var position = this.startPosition
   var time = 0.0
+  var leavedTankPos = false
   
   private def calcSpeedVect(angle: Double, power: Double): Vector2 = {
-    new Vector2(math.acos(angle),math.asin(angle)) * power * Ammunition.MULTIPLIER * this.massMultiplier
+    new Vector2(math.cos(angle),math.sin(angle)) * power * Ammunition.MULTIPLIER * this.massMultiplier
   }
   
   private def calcXPos(dt: Double): Double = this.startPosition.x+this.startSpeed.x*dt
@@ -104,12 +116,15 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   private def calcSpeed(): Vector2 = new Vector2(this.calcXSpeed(this.time), this.calcYSpeed(this.time))
   
-  private def testCollision(): Boolean = !this.world.gamefield.isEmpty(this.getPosition)
+  private def testCollision(): Boolean = !this.world.gamefield.isEmpty(this.getPosition) && this.leavedTankPos
   
 
   def update(dt: Double): Unit= {
     this.time = this.time + dt
     this.position = this.calcPos()
+    if((!this.leavedTankPos) && !(this.getStartPos == this.getPosition)){
+      this.leavedTankPos = true
+    }
     this.speed = this.calcSpeed()
     if (this.testCollision()) {
       if(this.world.gamefield.contains(this.getPosition)) {
@@ -124,7 +139,9 @@ class Bullet(startPos: Pos, angle: Int, power: Int, val massMultiplier: Double, 
   
   private def removeSelf() = this.world.removeBullet(this)
   
-  def getPosition: Pos = new Pos(this.position.x.toInt, this.position.y.toInt)
+  def getStartPos = new Pos(math.floor(this.startPosition.x).toInt, math.floor(this.startPosition.y).toInt)
+  
+  def getPosition: Pos = new Pos(math.floor(this.position.x).toInt, math.floor(this.position.y).toInt)
   
   def getPositionVector = this.position
   

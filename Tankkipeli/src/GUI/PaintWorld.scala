@@ -9,15 +9,22 @@ import event._
 import gameEngine.Pos
 import gameEngine.World
 import scala.math
-import gameEngine.Tank
+
+import scala.collection.mutable.Buffer
+
 
 
 class PaintWorld() extends Panel {
   
+  //creating game:
   val world = new World(TankGame.WorldWidth, TankGame.WorldHeight)
   
-  world.createTank("Player", 10)
-  world.createTank("AI", 40)
+  world.createTank("Player")
+  world.createTank("AI")
+  
+  world.addAmmosToTanks(10)
+  
+  val explosions = Buffer.empty[ExplosionAnimation]
   
   override def paintComponent(g: Graphics2D) {
     
@@ -46,7 +53,7 @@ class PaintWorld() extends Panel {
     
     //drawing data:
     val playerTank = world.getTanks.filter {_.id == "Player"}(0)
-    g.drawString(playerTank.getHp.toString + "/"+ World.TANKHP.toString , 0 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
+    g.drawString(playerTank.getHP.toString + "/"+ World.TANKHP.toString , 0 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
     g.drawString(playerTank.getFuelLevel.toString + "/" + World.TANKINITIALFUEL.toString, fract + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
     g.drawString(playerTank.getMagazineSize.toString, fract * 2 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
     g.drawString(playerTank.getCurrentAmmunition, fract * 3 + TankGame.InfoPanelPaddings, 30 + TankGame.InfoPanelPaddings)
@@ -106,17 +113,52 @@ class PaintWorld() extends Panel {
     drawPowerIndicator(playerTank)
     
     //draw bullets
+    def drawBullet(bullet: Bullet): Unit = {
+      val pos = bullet.getPositionVector
+      val x = Help.WorldXToUI(pos.x)
+      val y = Help.WorldYToUI(pos.y)
+      
+      g.drawImage(Images.cannonball, x, y, null)
+      
+    }
+    
+    if(!world.bulletBuffer.isEmpty) {
+      world.bulletBuffer.foreach { drawBullet(_) }
+    }
     
     
+    //create explosions
+    
+    if(world.isExpolded()) {
+      val pos = world.getExplosionPosition
+      this.explosions.append(ExplosionAnimation(pos, TankGame.imageSize*3))
+    }
+    
+    //draw explosions
+    this.explosions.foreach{ x => {
+      if(x.active) g.drawImage( x.getNextImage(), Help.WorldXToUI(x.pos.x) - x.size/3, Help.WorldYToUI(x.pos.y) - x.size/3, null)
+      else this.explosions.remove(this.explosions.indexOf(x))
+    }
+    }
     
   }
   
   
   //timer for requesting updates, this stuff is runned regulary
-  Timer(1000/100) {
+  
+  val timer = Timer(1000/100) {
     world.update(1.0/100)
     this.repaint()
+    if(world.endGame) stop()
   }
+  
+  var StopCounter = 30 //after game has ended animate 10 frames
+  def stop(): Unit = {
+    if(StopCounter > 0) StopCounter -= 1
+    else timer.stop()
+  }
+  
+  timer.start
   
   def playerTank(): Boolean = world.currentTank.id == "Player"
   
@@ -151,16 +193,37 @@ class PaintWorld() extends Panel {
     }
     
     case KeyPressed(_, Key.Space, _, _) => {
-      if(playerTank())
+      if(playerTank()){
         world.currentTank.shoot()
         world.nextTank
+      }
     }
-
   }
   
   focusable = true
   requestFocus
   
-  
+  case class ExplosionAnimation(pos: Pos, size: Int) {
+    private val images = Vector(Images.loadImage("explosion_1.png", size),
+                                Images.loadImage("explosion_2.png", size),
+                                Images.loadImage("explosion_3.png", size),
+                                Images.loadImage("explosion_4.png", size),
+                                Images.loadImage("smoke.png", size))
+   private var n = 0
+   var active = true
+   private var ret = images(0)
+   
+   def getNextImage(): BufferedImage= {
+      n = n + 1
+      if(n <= images.size*2) {
+        ret = images((n - 1)/2)
+        ret
+      }
+      else {
+        active = false
+        ret
+      }
+    }
+  }
   
 }

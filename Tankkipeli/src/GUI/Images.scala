@@ -46,5 +46,5 @@ object Images {
   val expl2 = loadImage("explosion_2.png")
   val expl3 = loadImage("explosion_3.png")
   val expl4 = loadImage("explosion_4.png")
-  val expl5 = loadImage("explosion_5.png")
+  val expl5 = loadImage("smoke.png")
 }
