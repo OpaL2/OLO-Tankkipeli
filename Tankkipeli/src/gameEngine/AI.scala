@@ -56,6 +56,9 @@ class AI (val difficulty : Int, world: World){
     // shooting power
     var power = 10
     // test hit location
+    
+    if(this.world.currentTank.getMagazineSize == 0) this.world.currentTank.AIshoot(angle, power) //passes turn to next tank if have no ammo
+    
     var hitPos = this.world.currentTank.testshoot(angle, power)
     //distance between testhit location and target  
     while(true) {

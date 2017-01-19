@@ -238,7 +238,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   
   override def toString = this.id
   
-  /**updates tank*/
+  /**updates tank, responsible for animating a lot of stuff in game*/
   def update(dt:Double) = {
    //drops tank one position down if it does not have ground below it
    if(this.reachedDestination && this.world.gamefield.isEmpty(this.position.down)) {
