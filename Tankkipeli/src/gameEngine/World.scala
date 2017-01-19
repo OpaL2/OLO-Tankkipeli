@@ -27,6 +27,7 @@ class World (width: Int, height: Int) {
   private val explosionStack = Stack.empty[Pos]
   var bulletBuffer = Buffer.empty[Bullet]
   var endGame = false
+  var endTurn = false
   
   //creating sound engine
   val sounds = new SoundEngine
@@ -109,6 +110,7 @@ class World (width: Int, height: Int) {
   def update(dt: Double) = {
     this.bulletBuffer.foreach { x => x.update(dt) }
     this.tankList.foreach(_.update(dt))
+    if(this.bulletBuffer.isEmpty) this.endTurn = false
   }
   
 }

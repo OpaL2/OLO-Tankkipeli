@@ -302,6 +302,7 @@ class PaintWorld() extends Panel {
       if(playerTank()){
         world.currentTank.shoot()
         world.nextTank
+        world.endTurn = true
       }
     }
     
