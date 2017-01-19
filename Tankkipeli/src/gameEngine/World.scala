@@ -34,7 +34,7 @@ class World (width: Int, height: Int) {
   
   
   //generating terrain
-  this.setFloor(GenTerrain.generate(5, width, 2))
+  this.setFloor(GenTerrain.generate(8, width, 2))
   
   /**creates floor from given vector of Y-axis coordinates*/
   def setFloor(coordinates: Vector[Int]) = {
