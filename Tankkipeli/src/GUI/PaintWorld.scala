@@ -280,9 +280,18 @@ class PaintWorld() extends Panel {
     }
     
     if(firstGame) drawStart()
+    if(displayDifficulty) drawSelectDifficulty()
     
     def drawSelectDifficulty(): Unit = {
+      g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+      g.setColor(Color.white)
+      g.fillRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
       
+      scaleFont(5)
+      
+      def drawDifficultyRect(width: Int, height: Int, x: Int, y: Int, label: String) = {
+        
+      }
       
       
     }
@@ -344,11 +353,19 @@ class PaintWorld() extends Panel {
     case KeyPressed(_, Key.Up, _, _) => {
       if(playerTank())
         world.currentTank.turnCannonRight(1)
+      else if(this.displayDifficulty) {
+        if(this.difficulty > 1) this.difficulty -= 1
+        this.repaint()
+      }
     }
     
     case KeyPressed(_, Key.Down, _, _) => {
       if(playerTank())
         world.currentTank.turnCannonLeft(1)
+      else if(this.displayDifficulty) {
+        if(this.difficulty < 3) this.difficulty += 1
+        this.repaint()
+      }
     }
     case KeyPressed(_, Key.W, _, _) => {
       if(playerTank()) {
@@ -378,8 +395,15 @@ class PaintWorld() extends Panel {
     
     case KeyPressed(_, Key.Enter, _, _) => {
       if(!running) {
-        this.newGame()
-        this.startGame()
+        if(!this.displayDifficulty){
+          this.displayDifficulty = true
+          this.repaint()
+        }
+        else {
+          if(this.displayDifficulty) this.displayDifficulty = false
+          this.newGame()
+          this.startGame()
+        }  
       }
     }
   }

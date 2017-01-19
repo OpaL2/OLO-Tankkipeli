@@ -134,6 +134,11 @@ class World (width: Int, height: Int, difficulty: Int) {
     }
     //taking care that ai can play future turns
     if(!this.endGame && !this.endTurn && this.currentTank.id =="Player") this.ai.startedTurn = false
+    
+    
+    //making some analysis about if game is ended or not
+    if(this.tankList.toVector().forall { _.getMagazineSize == 0}) this.endGame = true
+    
   }
   
 }
