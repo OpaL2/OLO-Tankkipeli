@@ -125,7 +125,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
   //testshoot is used by AI to check if it hits opponent or not. 
   //Returns position of the hit that can be compared to position of the enemy 
   //Testshoot does not consume any resources nor cause damage or have animations.
-  def testshoot(aiPosition :Pos, angle :Int, power:Int, ammotypefrommagazine :String):Pos ={
+  def testshoot(angle :Int, power:Int):Pos ={
     ???
     }
   
