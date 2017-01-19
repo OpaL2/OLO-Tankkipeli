@@ -42,13 +42,27 @@ class AI (val difficulty : Int, world: World){
     
     var currentAmmo = world.currentTank.getCurrentAmmunition
     
-    var shootpower = ???
+    var shootpower = ((255/world.gamefield.width)*tankdistance).toInt
     
     var hitlocation = (world.currentTank.testshoot(shootingAngle, shootpower))
     
     var hitdistance = math.sqrt((hitlocation.x + enemyp.x)^2 + (hitlocation.y + enemyp.y)^2 )
+    
+    var powerincrement = math.sqrt(hitdistance).toInt
+    
+    var angleincrement = 128/difficulty
       
+    if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootpower += powerincrement
+    else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootpower -= powerincrement
+    else world.currentTank.AIshoot(shootingAngle, shootpower)
       
+    if (hitdistance > 2 && hitlocation.x > enemyp.x ) shootingAngle -= angleincrement
+    else if (hitdistance > 2 && hitlocation.x < enemyp.x) shootingAngle += angleincrement
+    else world.currentTank.AIshoot(shootingAngle, shootpower)
+    
+    
+    
+    
     } 
    
 
