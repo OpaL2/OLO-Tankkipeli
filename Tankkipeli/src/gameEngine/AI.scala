@@ -47,7 +47,7 @@ class AI (val difficulty : Int, world: World){
   
   //shoot takes in positions and spits out parametres for shooting it 
   def shoot(ownp: Pos, enemyp: Pos): Unit = {
-    
+
     val enemyPosition = enemyp
     // distance between tanks
     val startAngle = 128

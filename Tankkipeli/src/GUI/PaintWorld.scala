@@ -41,6 +41,7 @@ class PaintWorld() extends Panel {
     world.addAmmosToTanks(10)
     
     explosions.clear()
+
   }
   
   val explosions = Buffer.empty[ExplosionAnimation]
