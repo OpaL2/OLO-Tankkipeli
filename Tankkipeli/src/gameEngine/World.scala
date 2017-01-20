@@ -14,7 +14,7 @@ object World {
   val DMGDIVIDER = 2
   val MAXDMGITER = 5
   val TANKINITIALFUEL = 100
-  val TANKSPEED = 0.5
+  val TANKSPEED = 1.0
   val TANKANIMATIONBOUN = 0.1
 }
 

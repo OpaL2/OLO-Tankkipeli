@@ -58,7 +58,7 @@ class PaintWorld() extends Panel {
     g.setBackground(Color.WHITE)
     
     //=================================================================================================================
-    //DRAW WORLD METHOD STARTS HERE
+    //DRAW WORLD FUNCTION STARTS HERE
     //=================================================================================================================
     
     def drawWorld(): Unit =  {
@@ -452,12 +452,12 @@ class PaintWorld() extends Panel {
     }
     case KeyPressed(_, Key.W, _, _) => {
       if(playerTank()) {
-        world.currentTank.increaseShootPower(1)
+        world.currentTank.increaseShootPower(2)
       }
     }
     case KeyPressed(_, Key.S, _, _) => {
       if(playerTank()) {
-        world.currentTank.decreaseShootPower(1)
+        world.currentTank.decreaseShootPower(2)
       }
     }
     
