@@ -326,7 +326,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     
     //make here AI tank animations for power and angle settings
     
-    if(this.AIBarrel) {
+    if(this.reachedDestination && this.AIBarrel) {
       if(this.shootDirection == this.AIBarrelValue) this.AIBarrel = false
       else {
         if(this.shootDirection < this.AIBarrelValue) this.turnCannonRight(1)
@@ -334,7 +334,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
       }
     }
     
-    if(this.AIPower) {
+    if(this.reachedDestination && this.AIPower) {
       if(this.shootPower == this.AIPowerValue) this.AIPower = false
       else {
         if(this.shootPower < this.AIPowerValue) this.increaseShootPower(1)
