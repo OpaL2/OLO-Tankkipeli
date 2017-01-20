@@ -336,7 +336,7 @@ class PaintWorld() extends Panel {
     firstGame = false
   }
   
-  def playerTank(): Boolean = world.currentTank.id == "Player" && running
+  def playerTank(): Boolean = world.currentTank.id == "Player" && running && !world.endTurn
   
   //key listener
   listenTo(keys)
