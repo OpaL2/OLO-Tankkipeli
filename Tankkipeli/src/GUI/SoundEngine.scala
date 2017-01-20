@@ -15,6 +15,7 @@ object SoundEngine {
   val tankDrive = Sound("tank_Drive.wav")
   val tankBarrel = Sound("tank_barrel.wav")
   val tankPower = Sound("adjust_power.wav")
+  val bigHit = Sound("big_hit.wav")
   
   def closeAllStreams() = {
     explosion.close()

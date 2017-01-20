@@ -56,7 +56,11 @@ class PaintWorld() extends Panel {
     g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
     g.setBackground(Color.WHITE)
     
+    //=================================================================================================================
+    //DRAW WORLD METHOD STARTS HERE
+    //=================================================================================================================
     
+    def drawWorld(): Unit =  {
     //drawing info panel
     
     //drawing frame:
@@ -230,6 +234,12 @@ class PaintWorld() extends Panel {
     }
     
     drawExplosions
+    }
+    
+    //=================================================================================================================
+    //DRAW WORLD FUNCTION ENDS HERE
+    //=================================================================================================================
+    
     
     //draw mesh if game over
     def drawEnd(): Unit = {
@@ -238,9 +248,45 @@ class PaintWorld() extends Panel {
           g.drawImage(Images.mesh, Help.WorldXToUI(x), Help.WorldYToUI(y), null)
         }
       }
+      
+      val y = Help.ScaleWorldYToUI(TankGame.WorldHeight) / 6
+      val x = Help.WorldXToUI(TankGame.WorldWidth)/2
+      val width = x/2
+      
+      g.setColor(Color.white)
+      scaleFont(5)
+      g.drawString("Game over!", x - width/2- 20, y)
+      scaleFont(1.0/5)
+      scaleFont(7)
+      
+      var label ="Draw"
+      val tanks = world.getTanks
+      val Player = tanks.filter(_.id == "Player")(0)
+      val Ai = tanks.filter(_.id == "AI")(0)
+      if(Player.isDestroyed){
+        g.setColor(Color.red)
+        label = "You Lost"
+      }
+      if(Ai.isDestroyed){
+        g.setColor(Color.blue)
+        label = "You Won"
+      }
+      if(Player.isDestroyed && Ai.isDestroyed) {
+        g.setColor(Color.white)
+        label = "Draw"
+      }
+      
+      g.drawString(label, x - width/2- 30, y* 2)
+      
+      scaleFont(1.0/7)
+      g.setColor(Color.white)
+      
+      g.drawString("Press enter to play again", x- width/2 + 60 , y*2 + 30)
+      
+      g.setColor(Color.black)
+      
     }
-    if(world.endGame) drawEnd()
-    
+
     def scaleFont(amount: Double) = {
       val currentFont = g.getFont
       val newFont = currentFont.deriveFont(currentFont.getSize * amount.toFloat)
@@ -278,9 +324,7 @@ class PaintWorld() extends Panel {
 
       world.sounds.loopSound(SoundEngine.lobbyMusic)
     }
-    
-    if(firstGame) drawStart()
-    if(displayDifficulty) drawSelectDifficulty()
+  
     
     def drawSelectDifficulty(): Unit = {
       g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
@@ -289,14 +333,50 @@ class PaintWorld() extends Panel {
       
       scaleFont(5)
       
-      def drawDifficultyRect(width: Int, height: Int, x: Int, y: Int, label: String) = {
+      def drawDifficultyRect(width: Int, height: Int, x: Int, y: Int, label: String, hilighted: Boolean) = {
+        val x0 = x - width/2
+        val y0 = y - height/2
+        val pad = 10
+        
+        g.setColor(Color.gray)
+        g.fillRect(x0, y0, width, height)
+        
+        if (hilighted) g.setColor(Color.white)
+        else g.setColor(Color.black)
+        
+        g.drawRect(x0, y0, width, height)
+        g.drawRect(x0 + pad, y0 +pad, width - pad*2, height - pad*2)
+        g.drawString(label, x0+ 2*pad, y0 + 2*pad + height/2)
+        
+        g.setColor(Color.black)
         
       }
       
       
-    }
+      val y = Help.ScaleWorldYToUI(TankGame.WorldHeight) / 6
+      val x = Help.WorldXToUI(TankGame.WorldWidth)/2
+      val width = x/2
+      val height = y -20
       
+      drawDifficultyRect(width, height, x, y*2, "Easy", difficulty == 1)
+      drawDifficultyRect(width, height, x, y*3, "Normal", difficulty == 2)
+      drawDifficultyRect(width, height, x, y*4, "Hard", difficulty == 3)
+      g.drawString("Select Difficulty:", x - width/2- 20, y)
+      
+      scaleFont(1.0/5)
+      
+    }
     
+    //selects based on flags what to draw
+    
+    if(running) drawWorld()
+    if(world.endGame) {
+      drawWorld()
+      drawEnd()
+    } 
+    
+     if(firstGame) drawStart()
+    if(displayDifficulty) drawSelectDifficulty()
     
   }
   
@@ -356,6 +436,7 @@ class PaintWorld() extends Panel {
       else if(this.displayDifficulty) {
         if(this.difficulty > 1) this.difficulty -= 1
         this.repaint()
+        world.sounds.playSound(SoundEngine.groundHit)
       }
     }
     
@@ -365,6 +446,7 @@ class PaintWorld() extends Panel {
       else if(this.displayDifficulty) {
         if(this.difficulty < 3) this.difficulty += 1
         this.repaint()
+        world.sounds.playSound(SoundEngine.groundHit)
       }
     }
     case KeyPressed(_, Key.W, _, _) => {
@@ -398,12 +480,14 @@ class PaintWorld() extends Panel {
         if(!this.displayDifficulty){
           this.displayDifficulty = true
           this.repaint()
+          this.world.sounds.playSound(SoundEngine.groundHit)
         }
         else {
           if(this.displayDifficulty) this.displayDifficulty = false
           this.newGame()
           this.startGame()
-        }  
+          this.world.sounds.playSound(SoundEngine.bigExplosion)
+        }
       }
     }
   }

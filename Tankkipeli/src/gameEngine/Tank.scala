@@ -281,7 +281,7 @@ class Tank(val id: String,private var position: Pos, private val world: World) e
     
     //if tank is destroyded play explosion animation and trigger end game
     if(this.isDestroyed) {
-      this.world.sounds.playSound(SoundEngine.bigExplosion)
+      this.world.sounds.playSound(SoundEngine.bigHit)
       this.world.addExpolsionPosition(this.getPosition)
       this.world.endGame = true
     }
