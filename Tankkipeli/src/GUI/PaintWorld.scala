@@ -299,9 +299,10 @@ class PaintWorld() extends Panel {
       g.setColor(Color.white)
       g.drawImage(Images.menu,0,0,null)
       scaleFont(5)
-      g.drawString("Tank game", 50, 100)
+      g.drawString("The Tank game", 200, 200)
+      g.drawString("Press ENTER to start", 140, 300)
       scaleFont(1.0/5)
-      g.drawString("Start game by pressing enter", 50, 150)
+     
       
       //draw control section
       val x = Help.WorldXToUI(TankGame.WorldWidth) -350
