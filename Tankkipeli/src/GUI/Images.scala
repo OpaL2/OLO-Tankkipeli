@@ -10,7 +10,7 @@ object Images {
     
   
   /**loads images from given path, and scales them to TankGame.imageSize size*/  
-  def loadImage(path: String, size: Int = TankGame.imageSize): BufferedImage= {
+  def loadImage(path: String, size: Int = TankGame.imageSize, scaleImage: Boolean = true): BufferedImage= {
   
     val image: BufferedImage = ImageIO.read(new File("./assets/" + path))
     val scaledImage = new BufferedImage(size,size,image.getType())
@@ -18,8 +18,8 @@ object Images {
     d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
     d.drawImage(image, 0,0, size, size,0,0, image.getWidth(), image.getHeight(), null)
     d.dispose()
-    
-    scaledImage
+    if(scaleImage) scaledImage
+    else image
   }
 
   //terraing images
@@ -45,5 +45,8 @@ object Images {
   //mesh
   val mesh = loadImage("blackmesh.png")
 
+  //background images
+  val menu = loadImage("menu_background.png", scaleImage = false)
+  val game = loadImage("game_background.png", scaleImage = false)
   
 }

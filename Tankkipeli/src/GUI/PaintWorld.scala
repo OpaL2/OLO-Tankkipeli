@@ -55,7 +55,7 @@ class PaintWorld() extends Panel {
     
     //clearing screen before redraw
     g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
-    g.setBackground(Color.WHITE)
+    g.drawImage(Images.game, 0, 0, null)
     
     //=================================================================================================================
     //DRAW WORLD FUNCTION STARTS HERE
@@ -65,7 +65,7 @@ class PaintWorld() extends Panel {
     //drawing info panel
     
     //drawing frame:
-    g.setColor(Color.BLACK)
+    g.setColor(Color.green)
     g.drawRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), TankGame.InfoPanelHeight)
     val fract = Help.WorldXToUI(TankGame.WorldWidth)/4
     g.drawLine(fract, 0, fract, TankGame.InfoPanelHeight)
@@ -167,7 +167,7 @@ class PaintWorld() extends Panel {
       val x = Help.WorldXToUI(pos.x)
       val y = Help.WorldYToUI(pos.y) - 5
       val label = tank.id
-      g.setColor(Color.gray)
+      g.setColor(Color.green)
       g.drawString(label, x, y)
     }
     
@@ -183,7 +183,7 @@ class PaintWorld() extends Panel {
       
       g.setColor(new Color((relativeHeight*255).toInt,255-(relativeHeight*255).toInt,0))
       g.fillRect(x, y, width, height)
-      g.setColor(Color.BLACK)
+      g.setColor(Color.black)
       g.drawRect(x,y,width, height)
     }
     
@@ -297,9 +297,8 @@ class PaintWorld() extends Panel {
     def drawStart(): Unit = {
       g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
       g.setColor(Color.white)
-      g.fillRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+      g.drawImage(Images.menu,0,0,null)
       scaleFont(5)
-      g.setColor(Color.black)
       g.drawString("Tank game", 50, 100)
       scaleFont(1.0/5)
       g.drawString("Start game by pressing enter", 50, 150)
@@ -329,8 +328,7 @@ class PaintWorld() extends Panel {
     
     def drawSelectDifficulty(): Unit = {
       g.clearRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
-      g.setColor(Color.white)
-      g.fillRect(0, 0, Help.WorldXToUI(TankGame.WorldWidth), Help.ScaleWorldYToUI(TankGame.WorldHeight))
+      g.drawImage(Images.menu,0,0,null)
       
       scaleFont(5)
       
@@ -339,11 +337,11 @@ class PaintWorld() extends Panel {
         val y0 = y - height/2
         val pad = 10
         
-        g.setColor(Color.gray)
+        g.setColor(Color.black)
         g.fillRect(x0, y0, width, height)
         
-        if (hilighted) g.setColor(Color.white)
-        else g.setColor(Color.black)
+        if (hilighted) g.setColor(Color.green)
+        else g.setColor(Color.white)
         
         g.drawRect(x0, y0, width, height)
         g.drawRect(x0 + pad, y0 +pad, width - pad*2, height - pad*2)
@@ -362,6 +360,7 @@ class PaintWorld() extends Panel {
       drawDifficultyRect(width, height, x, y*2, "Easy", difficulty == 1)
       drawDifficultyRect(width, height, x, y*3, "Normal", difficulty == 2)
       drawDifficultyRect(width, height, x, y*4, "Hard", difficulty == 3)
+      g.setColor(Color.white)
       g.drawString("Select Difficulty:", x - width/2- 20, y)
       
       scaleFont(1.0/5)
