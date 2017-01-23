@@ -13,23 +13,46 @@ class Gamefield(val width: Int, val height: Int) {
   
   def elementAt(location: Pos) = this.contents(location.y)(location.x)
   
-  def apply(location: Pos) = this.contents(location.y)(location.x)
+  def apply(location: Pos): GameObject = this.contents(location.y)(location.x)
+  
+  def apply(x: Int, y: Int): GameObject = this.apply(new Pos(x,y))
   
   def isEmpty(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Empty"
   
+  def isEmpty(x: Int, y: Int): Boolean = this.isEmpty(new Pos(x,y))
+  
   def isWall(location: Pos): Boolean = this.contains(location) && this.apply(location).typeString == "Wall"
   
+  def isWall(x: Int, y: Int): Boolean = this.isWall(new Pos(x,y))
+  
   def isTank(location: Pos): Boolean = this.contains(location)  && this.apply(location).typeString == "Tank"
+  
+  def isTank(x: Int, y: Int): Boolean = this.isTank(new Pos(x,y))
   
   private def nearTank(location: Pos): Boolean = this.isTank(location) || this.isTank(location.up) || this.isTank(location.down)
   
   def canMove(location: Pos): Boolean = this.contains(location)&&this.isEmpty(location)&&(!this.nearTank(location))
   
-  private def contains(x: Int, y: Int): Boolean = 
+  def doIFall(x: Int, y: Int): Boolean = this.doIFall(new Pos(x,y))
+  
+  def doIFall(pos: Pos): Boolean = {
+    var position = pos
+    while(this.contains(position)) {
+      if(this.isWall(position)) return false
+      position = position.down
+    }
+    true
+  }
+ 
+  
+  def contains(x: Int, y: Int): Boolean = 
     x >= 0 && x < this.width && 
     y >= 0 && y < this.height 
     
   def contains(location: Pos): Boolean = this.contains(location.x, location.y)
+  
+  /**gets content of gamefield object as vector, notice coordinates are (y,x)*/
+  def toVector(): Vector[Vector[GameObject]] = this.contents.toVector.map(_.toVector)
   
   override def toString() = {
     var str = ""
@@ -59,14 +82,19 @@ trait GameObject {
   def causeDmg(dmg: Int): Unit
   
   def isDestroyed: Boolean
+  
+  def getHP: Int
 }
 
-abstract class DestroyableObject(private val Hp: Int) {
+abstract class DestroyableObject(private var Hp: Int) extends GameObject {
   def getPosition: Pos
   
-  def causeDmg(dmg: Int): Unit = this.Hp - dmg
+  def causeDmg(dmg: Int): Unit = {
+    this.Hp = this.Hp - dmg
+    if(this.Hp <0) this.Hp = 0
+  }
   
-  def getHp = this.Hp
+  def getHP = this.Hp
   
   def isDestroyed: Boolean = this.Hp <= 0
 }
@@ -82,9 +110,11 @@ class Empty(private var pos: Pos) extends GameObject {
   def isDestroyed = false
   
   def causeDmg(dmg: Int): Unit = Unit  
+  
+  def getHP = -100
 }
 
-class Wall(private var pos: Pos) extends DestroyableObject(World.WALLHP) with GameObject {
+class Wall(private var pos: Pos) extends DestroyableObject(World.WALLHP) {
   
   def getPosition = this.pos
   
