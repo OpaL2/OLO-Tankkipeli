@@ -1,1 +1,3 @@
-# OLO-Apinat684323
+# OLO-Tankkipeli
+
+School group project where we made working tank game.
